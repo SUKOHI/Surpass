@@ -198,28 +198,34 @@ class Surpass {
 	
 	public function remove() {
 		
+		$result = $this->removeById(Input::get('remove_id'));
+		$this->_result = array('result' => $result);
+		return $result;
+		
+	}
+	
+	public function removeById($id) {
+		
 		$result = false;
 		
 		DB::beginTransaction();
 		
 		try {
 		
-			$remove_id = Input::get('remove_id');
-			$db = DB::table(self::TABLE)->where('id', '=', $remove_id);
+			$db = DB::table(self::TABLE)->where('id', '=', $id);
 			$image_file = $db->select('dir', 'filename')->first();
 			$remove_path = $this->filePath($image_file->dir, $image_file->filename);
 			File::delete($remove_path);
 			$db->delete();
 			DB::commit();
 			$result = true;
-				
+		
 		} catch (Exception $e) {
-				
+		
 			DB::rollback();
-				
+		
 		}
 		
-		$this->_result = array('result' => $result);
 		return $result;
 		
 	}

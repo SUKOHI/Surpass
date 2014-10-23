@@ -159,6 +159,11 @@ See above.
 	
 	Surpass::refresh();
 	
+**Remove by ID**
+	
+    $surpass = Surpass::path('img/uploads')
+					->removeById($link->image_file_id);
+	
 **About Saved IDs**
 
 Afeter uploading image(s) with Ajax, the preview(s) have hidden-input-tag(s) named "surpass_ids[]" (and of course the value(s) are ID of DB saved at the time).  
