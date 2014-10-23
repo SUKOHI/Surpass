@@ -57,7 +57,7 @@ Usage
 						'preview' => 'preview_class'
 					])
 					->button('Remove');
-	$surpass->load([1, 2, 3]);    // These are IDs of DB that you load saved image(s) in the past.
+	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.
 
 	return View::make('surpass', [
 			
