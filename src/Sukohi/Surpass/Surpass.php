@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\URL;
 class Surpass {
 
 	const TABLE = 'image_files';
+	const DIR_HIDDEN_NAME = 'surpass_hidden_dir';
 	private $_path, $_dir;
 	private $_alert = 'You can upload up to %d files.';
 	private $_button = 'Remove';
@@ -133,6 +134,7 @@ class Surpass {
 				}
 				
 			}
+			$this->_form_data[self::DIR_HIDDEN_NAME] = $this->_dir;
 			
 			return View::make('packages.sukohi.surpass.js', array(
 					
@@ -151,6 +153,7 @@ class Surpass {
 	
 	public function save() {
 
+		$this->dir(Input::get(self::DIR_HIDDEN_NAME));
 		$result = false;
 		$id = -1;
 		$input_id = $this->_ids['input'];
