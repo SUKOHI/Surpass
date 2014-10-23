@@ -1,0 +1,1 @@
+<div id="preview_images"{{ Surpass::renderCss('preview') }}></div>
