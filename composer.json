@@ -1,6 +1,6 @@
 {
     "name": "sukohi/surpass",
-    "description": "",
+    "description": "A PHP package mainly developed for Laravel to manage uploading images using Ajax and displaying thumbnail.",
     "authors": [
         {
             "name": "Sukohi",
