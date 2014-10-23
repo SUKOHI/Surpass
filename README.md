@@ -94,8 +94,8 @@ Usage
     // To save an image and the data into DB
 
 	$surpass = Surpass::path('img/uploads')
-					->dir('dir_name')
 					->id('input', 'image_upload');
+	$dir = $surpass->requestDir();
 	
 	if($surpass->save()) {
 
@@ -136,7 +136,8 @@ See above.
 	
 (in Upload Ajax)
 
-	$surpass = Surpass::path('img/uploads')->dir('dir_name');
+	$surpass = Surpass::path('img/uploads');
+	$dir = $surpass->requestDir();
 	
 	if($surpass->save()) {
 		// Something..
