@@ -162,7 +162,7 @@ See above.
 **Remove by ID**
 	
     $surpass = Surpass::path('img/uploads')
-					->removeB
+					->removeById(1);
 					
 **Load with validation**
 	
