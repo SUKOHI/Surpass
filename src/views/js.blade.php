@@ -126,7 +126,7 @@
 	<br>
 	{%=o.filename%}
 	<br>
-	<input type="hidden" name="surpass_ids[]" value="{%=o.surpassId%}">
+	<input type="hidden" name="{{ $id_hidden_name }}[]" value="{%=o.surpassId%}">
 	<button{{ Surpass::renderCss('button') }} onclick="return TU.remove(this, {%=o.surpassId%});">{{ $button_label }}</button>
 </script>
 <script>

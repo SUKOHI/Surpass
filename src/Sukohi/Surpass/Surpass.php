@@ -11,6 +11,7 @@ class Surpass {
 
 	const TABLE = 'image_files';
 	const DIR_HIDDEN_NAME = 'surpass_hidden_dir';
+	const ID_HIDDEN_NAME = 'surpass_ids';
 	private $_path, $_dir;
 	private $_alert = 'You can upload up to %d files.';
 	private $_button = 'Remove';
@@ -144,6 +145,7 @@ class Surpass {
 					'alert' => sprintf($this->_alert, $this->_max_files), 
 					'button_label' => $this->_button,  
 					'preview_params' => $this->_preview_params, 
+					'id_hidden_name' => self::ID_HIDDEN_NAME
 					
 			))->render();
 			
@@ -292,6 +294,16 @@ class Surpass {
 			
 		}
 		return $this;
+		
+	}
+	
+	public function loadIfHasOld() {
+		
+		if(Input::old(self::ID_HIDDEN_NAME) && is_array(Input::old(self::ID_HIDDEN_NAME))) {
+			
+			$this->load(Input::old(self::ID_HIDDEN_NAME));
+			
+		}
 		
 	}
 	
