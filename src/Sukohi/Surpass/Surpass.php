@@ -320,6 +320,14 @@ class Surpass {
 		
 	}
 	
+	public function imageFileIds() {
+		
+		$ids = !empty(Input::get(self::ID_HIDDEN_NAME)) ? Input::get(self::ID_HIDDEN_NAME) : [];
+		sort($ids);
+		return $ids;
+		
+	}
+	
 	private function filePath($dir, $filename='') {
 		
 		$path = $this->_path .'/'. $dir;
