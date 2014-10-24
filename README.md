@@ -162,7 +162,11 @@ See above.
 **Remove by ID**
 	
     $surpass = Surpass::path('img/uploads')
-					->removeById($link->image_file_id);
+					->removeB
+					
+**Load with validation**
+	
+    $surpass->loadIfHasOld();
 	
 **About Saved IDs**
 
