@@ -167,6 +167,10 @@ See above.
 **Load with validation**
 	
     $surpass->loadIfHasOld();
+    
+**Get image file ids when submitting**
+	
+    Surpass::imageFileIds();
 	
 **About Saved IDs**
 
