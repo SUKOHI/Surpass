@@ -274,7 +274,7 @@ class Surpass {
 		
 	}
 	
-	public function load($ids, $old_flag=true) {
+	public function load($ids=array(), $old_flag=true) {
 		
 		if(!is_array($ids)) {
 			
@@ -290,23 +290,28 @@ class Surpass {
 				
 		}
 		
-		$this->_load = array();
-		$image_files = DB::table(self::TABLE)
-							->select('id', 'dir', 'filename')
-							->whereIn('id', $ids)
-							->get();
-		
-		foreach ($image_files as $image_file) {
+		if(!empty($ids)) {
+
+			$this->_load = array();
+			$image_files = DB::table(self::TABLE)
+								->select('id', 'dir', 'filename')
+								->whereIn('id', $ids)
+								->get();
 			
-			$this->addLoadObject(
+			foreach ($image_files as $image_file) {
 					
-				$image_file->id, 
-				$image_file->dir, 
-				$image_file->filename
+				$this->addLoadObject(
+							
+						$image_file->id,
+						$image_file->dir,
+						$image_file->filename
+							
+				);
 					
-			);
+			}
 			
 		}
+		
 		return $this;
 		
 	}
