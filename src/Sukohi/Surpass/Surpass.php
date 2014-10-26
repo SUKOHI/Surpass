@@ -274,7 +274,21 @@ class Surpass {
 		
 	}
 	
-	public function load($ids) {
+	public function load($ids, $old_flag=true) {
+		
+		if(!is_array($ids)) {
+			
+			$ids = [$ids];
+			
+		}
+		
+		if($old_flag 
+				&& Input::old(self::ID_HIDDEN_NAME) 
+				&& is_array(Input::old(self::ID_HIDDEN_NAME))) {
+			
+			$ids = Input::old(self::ID_HIDDEN_NAME);
+				
+		}
 		
 		$this->_load = array();
 		$image_files = DB::table(self::TABLE)
@@ -294,16 +308,6 @@ class Surpass {
 			
 		}
 		return $this;
-		
-	}
-	
-	public function loadIfHasOld() {
-		
-		if(Input::old(self::ID_HIDDEN_NAME) && is_array(Input::old(self::ID_HIDDEN_NAME))) {
-			
-			$this->load(Input::old(self::ID_HIDDEN_NAME));
-			
-		}
 		
 	}
 	

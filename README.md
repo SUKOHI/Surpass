@@ -165,8 +165,10 @@ See above.
 					->removeById(1);
 					
 **Load with validation**
-	
-    $surpass->loadIfHasOld();
+
+    $ids = [1, 2, 3];
+    $surpass->load($ids, $old_flag = true);
+    // If $old_flag is true, $ids will be replaced with Input::old() value(s) automatically.
     
 **Get image file ids when submitting**
 	
