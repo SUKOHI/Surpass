@@ -56,7 +56,7 @@ Usage
 						'button' => 'button_class', 
 						'preview' => 'preview_class'
 					])
-					->progress('<img src="http://example.com/img/ajax-loader.gif"><br>Uploading..');
+					->progress('<img src="http://example.com/img/ajax-loader.gif"><br>Uploading..')
 					->button('Remove');
 	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.
 
