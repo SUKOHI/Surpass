@@ -52,7 +52,22 @@
 					
 			    },
 				done: function (e, data) {
+					
+					if(TU.progress != '') {
+					
+						$.each($('#'+ TU.ids['preview']).children(), function(index, child){
+							
+							if(!$(child).find('.surpass_ids').length) {
+								
+								child.remove();
+								return false;
+	
+							}
+	
+						});
 
+					}
+					
 					var file = data.files[0];
 					
 					if(data['result']['result']) {
@@ -67,17 +82,6 @@
 						TU.processingFile--;
 
 					}
-
-					$.each($('#'+ TU.ids['preview']).children(), function(index, child){
-
-						if(!$(child).find('#preview_footer').length) {
-
-							child.remove();
-							return false;
-
-						}
-
-					});
 					
 				}, 
 				formData: TU.formData
@@ -148,7 +152,7 @@
 	<br>
 	{%=o.filename%}
 	<br>
-	<input type="hidden" name="{{ $id_hidden_name }}[]" value="{%=o.surpassId%}">
+	<input class="{{ $id_hidden_name }}" type="hidden" name="{{ $id_hidden_name }}[]" value="{%=o.surpassId%}">
 	<button{{ Surpass::renderCss('button') }} onclick="return TU.remove(this, {%=o.surpassId%});">{{ $button_label }}</button>
 </script>
 <script>
