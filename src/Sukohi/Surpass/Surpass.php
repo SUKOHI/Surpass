@@ -12,7 +12,7 @@ class Surpass {
 	const TABLE = 'image_files';
 	const DIR_HIDDEN_NAME = 'surpass_hidden_dir';
 	const ID_HIDDEN_NAME = 'surpass_ids';
-	private $_path, $_dir;
+	private $_path, $_dir, $_progress;
 	private $_alert = 'You can upload up to %d files.';
 	private $_button = 'Remove';
 	private $_max_files = 5;
@@ -25,7 +25,8 @@ class Surpass {
 	);
 	private $_preview_params = array(
 			
-			'maxHeight' => 120
+		'maxHeight' => 120
+		
 	);
 	
 	public function path($path) {
@@ -104,6 +105,13 @@ class Surpass {
 		
 	}
 	
+	public function progress($content) {
+		
+		$this->_progress = $content;
+		return $this;
+		
+	}
+	
 	public function renderCss($mode) {
 		
 		return (!empty($this->_css[$mode])) ? ' class="'. $this->_css[$mode] .'"' : '';
@@ -139,13 +147,14 @@ class Surpass {
 			
 			return View::make('packages.sukohi.surpass.js', array(
 					
-					'max_file' => $this->_max_files, 
-					'load_data' => $load_data, 
-					'form_data' => $this->_form_data, 
-					'alert' => sprintf($this->_alert, $this->_max_files), 
-					'button_label' => $this->_button,  
-					'preview_params' => $this->_preview_params, 
-					'id_hidden_name' => self::ID_HIDDEN_NAME
+				'max_file' => $this->_max_files, 
+				'load_data' => $load_data, 
+				'form_data' => $this->_form_data, 
+				'alert' => sprintf($this->_alert, $this->_max_files), 
+				'button_label' => $this->_button,  
+				'preview_params' => $this->_preview_params,
+				'progress' => $this->_progress, 
+				'id_hidden_name' => self::ID_HIDDEN_NAME
 					
 			))->render();
 			

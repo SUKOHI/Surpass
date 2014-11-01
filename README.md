@@ -56,6 +56,7 @@ Usage
 						'button' => 'button_class', 
 						'preview' => 'preview_class'
 					])
+					->progress('<img src="http://example.com/img/ajax-loader.gif"><br>Uploading..');
 					->button('Remove');
 	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.
 
@@ -178,3 +179,10 @@ See above.
 
 Afeter uploading image(s) with Ajax, the preview(s) have hidden-input-tag(s) named "surpass_ids[]" (and of course the value(s) are ID of DB saved at the time).  
 So when submitting, you can receive those data as array.
+
+License
+====
+
+This package is licensed under the MIT License.
+
+Copyright 2014 Sukohi Kuhoh

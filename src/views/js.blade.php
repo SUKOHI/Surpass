@@ -13,6 +13,7 @@
 		loadData: [], 
 		overCallback: null, 
 		overCallbackFlag: false, 
+		progress: '', 
 		init: function() {
 			
 			if(TU.loadData.length > 0) {
@@ -26,7 +27,14 @@
 				add: function (e, data) {
 					
 					if(TU.processingFile < TU.maxFile) {
-	
+
+						if(TU.progress != '') {
+
+							var loadingBox = tmpl('loading_box', { content: TU.progress });
+							$('#'+ TU.ids['preview']).append(loadingBox);
+
+						}
+						
 						TU.processingFile++;
 						data.submit();
 						
@@ -59,6 +67,17 @@
 						TU.processingFile--;
 
 					}
+
+					$.each($('#'+ TU.ids['preview']).children(), function(index, child){
+
+						if(!$(child).find('#preview_footer').length) {
+
+							child.remove();
+							return false;
+
+						}
+
+					});
 					
 				}, 
 				formData: TU.formData
@@ -122,6 +141,9 @@
 <script type="text/x-tmpl" id="preview_box">
 	<div{{ Surpass::renderCss('div') }}></div>
 </script>
+<script type="text/x-tmpl" id="loading_box">
+	<div{{ Surpass::renderCss('loading') }}>{%#o.content%}</div>
+</script>
 <script type="text/x-tmpl" id="preview_footer">
 	<br>
 	{%=o.filename%}
@@ -154,6 +176,12 @@
 		@if(!empty($preview_params))
 
 			TU.previewParameters = {{ json_encode($preview_params) }};
+			
+		@endif
+
+		@if(!empty($progress))
+
+			TU.progress = '{{ $progress }}';
 			
 		@endif
 		
