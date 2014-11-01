@@ -57,7 +57,7 @@
 					
 						$.each($('#'+ TU.ids['preview']).children(), function(index, child){
 							
-							if(!$(child).find('.surpass_ids').length) {
+							if(!$(child).find('.{{ $id_hidden_name }}').length) {
 								
 								child.remove();
 								return false;
