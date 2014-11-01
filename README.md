@@ -54,7 +54,8 @@ Usage
 					->css([
 						'div' => 'div_class', 
 						'button' => 'button_class', 
-						'preview' => 'preview_class'
+						'preview' => 'preview_class', 
+						'loading' => 'loading_class'
 					])
 					->progress('<img src="http://example.com/img/ajax-loader.gif"><br>Uploading..')
 					->button('Remove');
