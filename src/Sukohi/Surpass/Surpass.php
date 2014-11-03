@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
+use Carbon\Carbon;
 
 class Surpass {
 
@@ -162,7 +163,7 @@ class Surpass {
 		
 	}
 	
-	public function save() {
+	public function save($attributes = array()) {
 
 		$this->dir(Input::get(self::DIR_HIDDEN_NAME));
 		$result = false;
@@ -178,18 +179,24 @@ class Surpass {
 
 			$save_path = $this->filePath($this->_dir);
 			Input::file($input_id)->move($save_path, $filename);
-			
-			$id = DB::table(self::TABLE)->insertGetId([
+			$created_at = Carbon::now();
+			$save_params = array(
 		
 				'dir' => $this->_dir,
 				'filename' => $filename,
 				'extension' => $extension,
 				'size' => $size,
-				'created_at' => date('Y-m-d H:i:s')
+				'created_at' => $created_at, 
+				'attributes' => (!empty($attributes)) ? json_encode($attributes) : ''
 			
-			]);
+			);
+			
+			$id = DB::table(self::TABLE)->insertGetId($save_params);
 			DB::commit();
-			$this->addLoadObject($id, $this->_dir, $filename);
+
+			$save_params['id'] = $id;
+			$save_params['attributes'] = $attributes;
+			$this->addLoadObject($save_params);
 			$result = true;
 			
 		} catch (Exception $e) {
@@ -303,19 +310,23 @@ class Surpass {
 
 			$this->_load = array();
 			$image_files = DB::table(self::TABLE)
-								->select('id', 'dir', 'filename')
+								->select('id', 'dir', 'filename', 'extension', 'size', 'created_at', 'attributes')
 								->whereIn('id', $ids)
 								->get();
 			
 			foreach ($image_files as $image_file) {
 					
-				$this->addLoadObject(
+				$this->addLoadObject(array(
 							
-						$image_file->id,
-						$image_file->dir,
-						$image_file->filename
+					'id' => $image_file->id,
+					'dir' => $image_file->dir,
+					'filename' => $image_file->filename,
+					'extension' => $image_file->extension,
+					'size' => $image_file->size,
+					'created_at' => $image_file->created_at,
+					'attributes' => json_decode($image_file->attributes, true)
 							
-				);
+				));
 					
 			}
 			
@@ -366,15 +377,40 @@ class Surpass {
 		
 	}
 	
-	private function addLoadObject($id, $dir, $filename) {
+	private function addLoadObject($params) {
 
+		$id = $params['id'];
+		$dir = $params['dir'];
+		$filename = $params['filename'];
+		$attributes = $params['attributes'];
+		
 		$load = new \stdClass;
 		$load->id = $id;
 		$load->dir = $dir;
 		$load->filename = $filename;
 		$load->path = $this->filePath($dir, $filename);
 		$load->url = $this->fileUrl($dir, $filename);
+		$load->attributes = $attributes;
+		$load->tag = '<img src="'. $load->url .'"'. $this->generateAttribute($attributes) .'>';
 		$this->_load[$id] = $load;
+		
+	}
+	
+	private function generateAttribute($attributes) {
+		
+		$return = '';
+		
+		if(!empty($attributes)) {
+				
+			foreach ($attributes as $key => $value) {
+		
+				$return .= ' '. $key .'="'. $value .'"';
+		
+			}
+				
+		}
+		
+		return $return;
 		
 	}
 	
