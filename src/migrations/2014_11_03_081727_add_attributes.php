@@ -26,7 +26,10 @@ class AddAttributes extends Migration {
 	 */
 	public function down()
 	{
-		$table->dropColumn('attributes');
+		Schema::table('image_files', function($table)
+		{
+			$table->dropColumn('attributes');
+		});
 	}
 
 }
