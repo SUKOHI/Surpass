@@ -161,15 +161,19 @@ See above.
 	
 	return $surpass->result();
 
-**Refresh**
-	
-	Surpass::refresh();
+**Refresh**  
+This method will remove all data and images that don't already exist.  
+
+    $surpass = Surpass::path('img/uploads');
+    $surpass->refresh();
 	
 **Remove by ID**
 	
     $surpass = Surpass::path('img/uploads')
 					->removeById(1);
-					
+	// or
+    $surpass = Surpass::path('img/uploads')
+					->removeById([1, 2, 3]);
 **Load with validation**
 
     $ids = [1, 2, 3];

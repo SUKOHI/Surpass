@@ -222,19 +222,36 @@ class Surpass {
 		
 	}
 	
-	public function removeById($id) {
+	public function removeById($ids = '') {
 		
 		$result = false;
+		
+		if(empty($ids)) {
+			
+			return $result;
+			
+		}
+		
+		if(!is_array($ids)) {
+			
+			$ids = array($ids);
+			
+		}
 		
 		DB::beginTransaction();
 		
 		try {
 		
-			$db = DB::table(self::TABLE)->where('id', '=', $id);
-			$image_file = $db->select('dir', 'filename')->first();
-			$remove_path = $this->filePath($image_file->dir, $image_file->filename);
-			File::delete($remove_path);
-			$db->delete();
+			foreach ($ids as $id) {
+				
+				$db = DB::table(self::TABLE)->where('id', '=', $id);
+				$image_file = $db->select('dir', 'filename')->first();
+				$remove_path = $this->filePath($image_file->dir, $image_file->filename);
+				File::delete($remove_path);
+				$db->delete();
+				
+			}
+			
 			DB::commit();
 			$result = true;
 		
@@ -261,8 +278,9 @@ class Surpass {
 		DB::beginTransaction();
 		
 		try {
-		
+			
 			$image_files = DB::table(self::TABLE)->select('id', 'dir', 'filename')->get();
+			$exists_image_pathes = array();
 			
 			foreach ($image_files as $key => $image_file) {
 				
@@ -274,8 +292,26 @@ class Surpass {
 					 		->where('id', '=', $image_file->id)
 				 			->delete();
 					
+				} else {
+					
+					$exists_image_pathes[] = public_path($this->_path .'/'. $image_file->dir .'/'. $image_file->filename);
+					
 				}
 				
+			}
+
+			$files = File::allFiles($this->_path);
+				
+			foreach ($files as $file) {
+			
+				$remove_path = $file->getRealPath();
+				
+				if(!in_array($remove_path, $exists_image_pathes)) {
+					
+					File::delete($remove_path);
+					
+				}
+			
 			}
 			
 			DB::commit();
