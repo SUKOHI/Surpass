@@ -180,8 +180,9 @@ This method will remove all data and images that don't already exist.
     $surpass->load($ids, $old_flag = true);
     // If $old_flag is true, $ids will be replaced with Input::old() value(s) automatically.
     
-**Get image file ids when submitting**
+**Get image file id(s) when submitting**
 	
+    Surpass::imageFileId();
     Surpass::imageFileIds();
 	
 **About Saved IDs**

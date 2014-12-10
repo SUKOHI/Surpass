@@ -385,6 +385,20 @@ class Surpass {
 		
 	}
 	
+	public function imageFileId() {
+		
+		$ids = Surpass::imageFileIds();
+		
+		if(!empty($ids)) {
+			
+			return $ids[0];
+			
+		}
+		
+		return '';
+		
+	}
+	
 	public function imageFileIds() {
 		
 		$ids = !empty(Input::get(self::ID_HIDDEN_NAME)) ? Input::get(self::ID_HIDDEN_NAME) : [];
