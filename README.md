@@ -182,8 +182,8 @@ This method will remove all data and images that don't already exist.
     
 **Get image file id(s) when submitting**
 	
-    Surpass::imageFileId();
-    Surpass::imageFileIds();
+    Surpass::imageFileId('dir_name');
+    Surpass::imageFileIds('dir_name');
 	
 **About Saved IDs**
 

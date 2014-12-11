@@ -396,9 +396,9 @@ class Surpass {
 		
 	}
 	
-	public function imageFileId() {
+	public function imageFileId($dir) {
 		
-		$ids = Surpass::imageFileIds();
+		$ids = Surpass::imageFileIds($dir);
 		
 		if(!empty($ids)) {
 			
@@ -410,8 +410,9 @@ class Surpass {
 		
 	}
 	
-	public function imageFileIds() {
+	public function imageFileIds($dir) {
 		
+		$this->dir($dir);
 		$ids = !empty(Input::get($this->_id_hidden_name)) ? Input::get($this->_id_hidden_name) : [];
 		sort($ids);
 		return $ids;
