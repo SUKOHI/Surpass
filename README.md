@@ -190,6 +190,48 @@ This method will remove all data and images that don't already exist.
 Afeter uploading image(s) with Ajax, the preview(s) have hidden-input-tag(s) named "surpass_ids[]" (and of course the value(s) are ID of DB saved at the time).  
 So when submitting, you can receive those data as array.
 
+**with Multiple file-inputs**
+
+    (in Controller)
+	$surpass = Surpass::path('img/uploads');
+	$surpass_x = clone $surpass->dir('xxx')
+					->ids([
+						'input' => 'input-xxx',
+						'preview' => 'preview-xxx'
+					]);
+	$surpass_y = clone $surpass->dir('yyy')
+					->ids([
+						'input' => 'input-yyy',
+						'preview' => 'preview-yyy'
+					]);
+	return View::make('view', [
+		'surpass_x' => $surpass_x,
+		'surpass_y' => $surpass_y
+	]);
+	
+	(in View)
+	<input 
+		id="input-xxx" 
+		name="input-xxx" 
+		title="Select Image" 
+		data-url="http://example.com/upload" 
+		data-remove-url="http://example.com/remove" 
+		accept="image/*" 
+		type="file" multiple>
+	{{ $surpass_x->html('preview') }}
+	<input 
+		id="input-yyy" 
+		name="input-yyy" 
+		title="Select Image" 
+		data-url="http://example.com/upload" 
+		data-remove-url="http://example.com/remove" 
+		accept="image/*" 
+		type="file" multiple>
+	{{ $surpass_y->html('preview') }}
+    // JS
+    {{ $surpass_x->html('js') }}
+    {{ $surpass_y->html('js') }}
+
 License
 ====
 

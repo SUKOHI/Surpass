@@ -40,6 +40,7 @@ class Surpass {
 	public function dir($dir) {
 	
 		$this->_dir = $dir;
+		$this->_id_hidden_name = self::ID_HIDDEN_NAME .'_'. $dir;
 		return $this;
 	
 	}
@@ -123,7 +124,10 @@ class Surpass {
 
 		if($mode == 'preview') {
 			
-			return View::make('packages.sukohi.surpass.preview')->render();
+			return View::make('packages.sukohi.surpass.preview', array(
+					'id' => $this->renderId('preview'),
+					'css' => $this->renderCss('preview')
+			))->render();
 			
 		} else if($mode == 'js') {
 			
@@ -155,7 +159,14 @@ class Surpass {
 				'button_label' => $this->_button,  
 				'preview_params' => $this->_preview_params,
 				'progress' => $this->_progress, 
-				'id_hidden_name' => self::ID_HIDDEN_NAME
+				'id_hidden_name' => $this->_id_hidden_name, 
+				'dir' => strtolower($this->_dir), 
+				'dir_studly' => studly_case($this->_dir),
+				'input_id' => $this->renderId('input'),
+				'preview_id' => $this->renderId('preview'),
+				'css_div' => Surpass::renderCss('div'), 
+				'css_loading' => Surpass::renderCss('loading'), 
+				'css_button' => Surpass::renderCss('button')
 					
 			))->render();
 			
@@ -335,10 +346,10 @@ class Surpass {
 		}
 		
 		if($old_flag 
-				&& Input::old(self::ID_HIDDEN_NAME) 
-				&& is_array(Input::old(self::ID_HIDDEN_NAME))) {
+				&& Input::old($this->_id_hidden_name) 
+				&& is_array(Input::old($this->_id_hidden_name))) {
 			
-			$ids = Input::old(self::ID_HIDDEN_NAME);
+			$ids = Input::old($this->_id_hidden_name);
 				
 		}
 		
@@ -401,7 +412,7 @@ class Surpass {
 	
 	public function imageFileIds() {
 		
-		$ids = !empty(Input::get(self::ID_HIDDEN_NAME)) ? Input::get(self::ID_HIDDEN_NAME) : [];
+		$ids = !empty(Input::get($this->_id_hidden_name)) ? Input::get($this->_id_hidden_name) : [];
 		sort($ids);
 		return $ids;
 		
