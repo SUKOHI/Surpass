@@ -13,6 +13,7 @@ class Surpass {
 	const TABLE = 'image_files';
 	const DIR_HIDDEN_NAME = 'surpass_hidden_dir';
 	const ID_HIDDEN_NAME = 'surpass_ids';
+	const KEY_HIDDEN_NAME = 'surpass_keys';
 	private $_path, $_dir, $_progress;
 	private $_alert = 'You can upload up to %d files.';
 	private $_button = 'Remove';
@@ -149,6 +150,7 @@ class Surpass {
 				
 			}
 			$this->_form_data[self::DIR_HIDDEN_NAME] = $this->_dir;
+			$this->_form_data[self::KEY_HIDDEN_NAME] = json_encode($this->_ids);
 			
 			return View::make('packages.sukohi.surpass.js', array(
 					
@@ -177,6 +179,7 @@ class Surpass {
 	public function save($attributes = array()) {
 
 		$this->dir(Input::get(self::DIR_HIDDEN_NAME));
+		$this->ids(json_decode(Input::get(self::KEY_HIDDEN_NAME), true));
 		$result = false;
 		$id = -1;
 		$input_id = $this->_ids['input'];
