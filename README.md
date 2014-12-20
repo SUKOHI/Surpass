@@ -3,6 +3,9 @@ Surpass
 
 A PHP package mainly developed for Laravel to manage uploading images using Ajax and displaying thumbnails.
 
+(Example)  
+!['Kitsilano'](http://i.imgur.com/cJ6t50G.png)
+
 Requirements
 ====
 
@@ -231,6 +234,19 @@ So when submitting, you can receive those data as array.
     // JS
     {{ $surpass_x->html('js') }}
     {{ $surpass_y->html('js') }}
+
+**Set filename length**
+
+    Surpass::filenameLength(10);    // Default: 10
+
+**Insert**
+
+    $insert_id = Surpass::path('path')
+                    ->dir('dir')
+                    ->insert('file_path', $attributes = array());
+
+*Note: This method is to save image(s) and their data directly like seeding.  
+So, in usual you should use save() method.
 
 License
 ====

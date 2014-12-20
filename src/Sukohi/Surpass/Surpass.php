@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
+use Illuminate\Filesystem\Filesystem;
 
 class Surpass {
 
@@ -18,6 +19,7 @@ class Surpass {
 	private $_alert = 'You can upload up to %d files.';
 	private $_button = 'Remove';
 	private $_max_files = 5;
+	private $_filename_length = 10;
 	private $_form_data, $_result, $_load = array();
 	private $_ids = array(
 			
@@ -176,6 +178,51 @@ class Surpass {
 		
 	}
 	
+	public function filenameLength($length) {
+		
+		$this->_filename_length = $length;
+		return $this;
+		
+	}
+	
+	public function insert($file_path, $attributes = array()) {
+
+		if(!File::exists($file_path)) {
+			
+			return -1;
+			
+		}
+		
+		DB::beginTransaction();
+		
+		try {
+		
+			$extension = File::extension($file_path);
+			$filename = $this->filename($extension);
+			$size = File::size($file_path);
+			$save_dir = $this->filePath($this->_dir);
+			
+			if(!File::exists($save_dir)) {
+				
+				File::makeDirectory($save_dir);
+				
+			}
+			
+			$save_path = $save_dir .'/'. $filename;
+			File::copy($file_path, $save_path);
+			DB::commit();
+			
+		} catch (Exception $e) {
+			
+			DB::rollback();
+			return -1;
+				
+		}
+		
+		return $this->saveData($filename, $extension, $size, $attributes);
+		
+	}
+	
 	public function save($attributes = array()) {
 
 		$this->dir(Input::get(self::DIR_HIDDEN_NAME));
@@ -184,7 +231,7 @@ class Surpass {
 		$id = -1;
 		$input_id = $this->_ids['input'];
 		$extension = Input::file($input_id)->getClientOriginalExtension();
-		$filename = str_random(10) .'.'. $extension;
+		$filename = $this->filename($extension);
 		$size = Input::file($input_id)->getSize();
 		
 		DB::beginTransaction();
@@ -193,24 +240,8 @@ class Surpass {
 
 			$save_path = $this->filePath($this->_dir);
 			Input::file($input_id)->move($save_path, $filename);
-			$created_at = Carbon::now();
-			$save_params = array(
-		
-				'dir' => $this->_dir,
-				'filename' => $filename,
-				'extension' => $extension,
-				'size' => $size,
-				'created_at' => $created_at, 
-				'attributes' => (!empty($attributes)) ? json_encode($attributes) : ''
-			
-			);
-			
-			$id = DB::table(self::TABLE)->insertGetId($save_params);
+			$id = $this->saveData($filename, $extension, $size, $attributes);
 			DB::commit();
-
-			$save_params['id'] = $id;
-			$save_params['attributes'] = $attributes;
-			$this->addLoadObject($save_params);
 			$result = true;
 			
 		} catch (Exception $e) {
@@ -476,6 +507,44 @@ class Surpass {
 		}
 		
 		return $return;
+		
+	}
+	
+	private function filename($extension) {
+		
+		return str_random($this->_filename_length) .'.'. $extension;
+		
+	}
+	
+	private function saveData($filename, $extension, $size, $attributes) {
+		
+		$save_params = array(
+		
+			'dir' => $this->_dir,
+			'filename' => $filename,
+			'extension' => $extension,
+			'size' => $size,
+			'created_at' => Carbon::now(),
+			'attributes' => (!empty($attributes)) ? json_encode($attributes) : ''
+		
+		);
+		
+		$id = DB::table(self::TABLE)->insertGetId($save_params);
+		
+		if($id > 0) {
+			
+			$save_params['id'] = $id;
+			$save_params['attributes'] = $attributes;
+			$this->addLoadObject($save_params);
+			
+		} else {
+			
+			$id = -1;
+			throw new Exception('Save Failed.');
+			
+		}
+		
+		return $id;
 		
 	}
 	
