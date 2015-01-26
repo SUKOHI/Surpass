@@ -27,6 +27,10 @@ class Surpass {
 		'preview' => 'preview_images'
 		
 	);
+	private $_callbacks = array(
+		'add' => '', 
+		'done' => ''
+	);
 	private $_preview_params = array(
 			
 		'maxHeight' => 120
@@ -117,6 +121,13 @@ class Surpass {
 		
 	}
 	
+	public function callback($callbacks) {
+		
+		$this->_callbacks = $callbacks;
+		return $this;
+		
+	}
+	
 	public function renderCss($mode) {
 		
 		return (!empty($this->_css[$mode])) ? ' class="'. $this->_css[$mode] .'"' : '';
@@ -163,6 +174,7 @@ class Surpass {
 				'button_label' => $this->_button,  
 				'preview_params' => $this->_preview_params,
 				'progress' => $this->_progress, 
+				'callbacks' => $this->_callbacks, 
 				'id_hidden_name' => $this->_id_hidden_name, 
 				'dir' => strtolower($this->_dir), 
 				'dir_studly' => studly_case($this->_dir),

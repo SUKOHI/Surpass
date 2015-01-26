@@ -62,6 +62,12 @@ Usage
 						'loading' => 'loading_class'
 					])
 					->progress('<img src="http://example.com/img/ajax-loader.gif"><br>Uploading..')
+					->callback([
+						'upload' => 'alert("Uploading..");', 
+						'done' => 'alert("Done.");',
+						'failed' => 'alert("Failed..");', 
+						'remove' => 'alert("Removed");'
+					])
 					->button('Remove');
 	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.
 

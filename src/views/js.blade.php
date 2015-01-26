@@ -36,6 +36,7 @@
 						}
 						
 						TU{{ $dir_studly }}.processingFile++;
+						{{ (!empty($callbacks['upload'])) ? $callbacks['upload'] : '' }}
 						data.submit();
 						
 					} else if(TU{{ $dir_studly }}.overCallbackFlag && $.isFunction(TU{{ $dir_studly }}.overCallback)) {
@@ -73,13 +74,15 @@
 					if(data['result']['result']) {
 
 						loadImage(file, function (img) {
-								TU{{ $dir_studly }}.preview(img, data['result']['insertId'], file.name)
+								TU{{ $dir_studly }}.preview(img, data['result']['insertId'], file.name);
+								{{ (!empty($callbacks['done'])) ? $callbacks['done'] : '' }}
 							}, TU{{ $dir_studly }}.previewParameters
 						);
 
 					} else {
 
 						TU{{ $dir_studly }}.processingFile--;
+						{{ (!empty($callbacks['failed'])) ? $callbacks['failed'] : '' }}
 
 					}
 					
@@ -132,6 +135,7 @@
 					TU{{ $dir_studly }}.processingFile--;
 	
 				}
+				{{ (!empty($callbacks['remove'])) ? $callbacks['remove'] : '' }}
 				
 			}, 'json');
 			
