@@ -66,7 +66,8 @@ Usage
 						'upload' => 'alert("Uploading..");', 
 						'done' => 'alert("Done.");',
 						'failed' => 'alert("Failed..");', 
-						'remove' => 'alert("Removed");'
+						'remove' => 'alert("Removed");', 
+						'load' => 'alert("Loading..");'
 					])
 					->button('Remove');
 	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.

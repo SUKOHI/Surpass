@@ -98,6 +98,7 @@
 			var previewFooter = tmpl('preview_footer_{{ $dir }}', {surpassId: id, filename: filename});
 			var content = $(previewBox).append(img).append(previewFooter);
 			$('#'+ TU{{ $dir_studly }}.ids['preview']).append(content);
+			{{ (!empty($callbacks['load'])) ? $callbacks['load'] : '' }}
 	
 		}, 
 		initialPreview: function() {
