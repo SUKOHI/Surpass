@@ -84,23 +84,26 @@ Usage
     
     Note: Need to load jQuery, jQuery UI and jQuery-File-Upload(jquery.iframe-transport.js, jquery.fileupload.js, load-image.all.min.js, tmpl.min.js)
 
-    <form>
-    	<input 
-    		id="image_upload" 
-    		name="image_upload" 
-    		title="Select Image" 
-    		data-url="http://example.com/upload" 
-    		data-remove-url="http://example.com/remove" 
-    		accept="image/*" 
-    		type="file" multiple>
-    		
-		<!-- Preview(s) will be displayed here -->
-    	{{ $surpass->html('preview') }}
-    </form>
+    @section('content')
+        <form>
+        	<input 
+        		id="image_upload" 
+        		name="image_upload" 
+        		title="Select Image" 
+        		data-url="http://example.com/upload" 
+        		data-remove-url="http://example.com/remove" 
+        		accept="image/*" 
+        		type="file" multiple>
+        		
+    		<!-- Preview(s) will be displayed here -->
+        	{{ $surpass->html('preview') }}
+        </form>
+    @stop
     
     <!-- JS code will be displayed here -->
-    {{ $surpass->html('js') }}
-
+    @section('script')
+        {{ $surpass->html('js') }}
+    @stop
 
 **Upload (in http://example.com/upload using Ajax)**
 
@@ -125,7 +128,8 @@ Usage
 	}
 	
 	return $surpass->result();  // This will return json.
-
+	
+	*Note: To save a image you want, you need to make a specific dir in advance.
 
 **Remove (in http://example.com/remove using Ajax)**
 

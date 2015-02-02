@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
+use Exception;
 
 class Surpass {
 
@@ -245,12 +246,24 @@ class Surpass {
 		$extension = Input::file($input_id)->getClientOriginalExtension();
 		$filename = $this->filename($extension);
 		$size = Input::file($input_id)->getSize();
+		$error_message = '';
 		
 		DB::beginTransaction();
 		
 		try {
 
 			$save_path = $this->filePath($this->_dir);
+			
+			if(!file_exists($save_path)) {
+				
+				throw new Exception('The directory doesn\'t exist.');
+				
+			} else if(!is_writable($save_path)) {
+				
+				throw new Exception('The directory is not writable.');
+				
+			}
+			
 			Input::file($input_id)->move($save_path, $filename);
 			$id = $this->saveData($filename, $extension, $size, $attributes);
 			DB::commit();
@@ -258,6 +271,7 @@ class Surpass {
 			
 		} catch (Exception $e) {
 			
+			$error_message = $e->getMessage();
 			DB::rollback();
 			
 		}
@@ -267,13 +281,19 @@ class Surpass {
 			'insertId' => $id
 		);
 		
+		if(!empty($error_message)) {
+			
+			$this->_result['error_message'] = $error_message;
+			
+		}
+		
 		return $result;
 		
 	}
 	
 	public function remove() {
 		
-		$result = $this->removeById(Input::get('remove_id'));
+		$result = $this->removeById(intval(Input::get('remove_id')));
 		$this->_result = array('result' => $result);
 		return $result;
 		
