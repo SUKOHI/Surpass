@@ -16,12 +16,14 @@ class Surpass {
 	const DIR_HIDDEN_NAME = 'surpass_hidden_dir';
 	const ID_HIDDEN_NAME = 'surpass_ids';
 	const KEY_HIDDEN_NAME = 'surpass_keys';
+	const KEY_OVERWRITE_ID = 'surpass_overwrite_id';
 	private $_path, $_dir, $_progress;
 	private $_alert = 'You can upload up to %d files.';
 	private $_button = 'Remove';
 	private $_max_files = 5;
 	private $_filename_length = 10;
 	private $_form_data, $_result, $_load = array();
+    private $_overwrite = false;
 	private $_ids = array(
 			
 		'input' => 'image_upload',
@@ -107,6 +109,13 @@ class Surpass {
 		return $this;
 	
 	}
+
+	public function overwrite($bool = false) {
+
+		$this->_overwrite = $bool;
+		return $this;
+
+	}
 	
 	public function css($css) {
 		
@@ -165,7 +174,7 @@ class Surpass {
 			}
 			$this->_form_data[self::DIR_HIDDEN_NAME] = $this->_dir;
 			$this->_form_data[self::KEY_HIDDEN_NAME] = json_encode($this->_ids);
-			
+
 			return View::make('packages.sukohi.surpass.js', array(
 					
 				'max_file' => $this->_max_files, 
@@ -183,7 +192,8 @@ class Surpass {
 				'preview_id' => $this->renderId('preview'),
 				'css_div' => Surpass::renderCss('div'), 
 				'css_loading' => Surpass::renderCss('loading'), 
-				'css_button' => Surpass::renderCss('button')
+				'css_button' => Surpass::renderCss('button'),
+                'overwrite' => $this->_overwrite
 					
 			))->render();
 			
@@ -278,7 +288,8 @@ class Surpass {
 		
 		$this->_result = array(
 			'result' => $result,
-			'insertId' => $id
+			'insertId' => $id,
+            'saveMode' => ($this->isOverwrite()) ? 'overwrite' : 'insert'
 		);
 		
 		if(!empty($error_message)) {
@@ -412,7 +423,7 @@ class Surpass {
 		}
 		
 		if($old_flag 
-				&& Input::old($this->_id_hidden_name) 
+				&& Input::old($this->_id_hidden_name)
 				&& is_array(Input::old($this->_id_hidden_name))) {
 			
 			$ids = Input::old($this->_id_hidden_name);
@@ -479,7 +490,8 @@ class Surpass {
 	public function imageFileIds($dir) {
 		
 		$this->dir($dir);
-		$ids = !empty(Input::get($this->_id_hidden_name)) ? Input::get($this->_id_hidden_name) : [];
+        $id_hidden_name = Input::get($this->_id_hidden_name);
+		$ids = !empty($id_hidden_name) ? Input::get($this->_id_hidden_name) : [];
 		sort($ids);
 		return $ids;
 		
@@ -547,37 +559,52 @@ class Surpass {
 		return str_random($this->_filename_length) .'.'. $extension;
 		
 	}
-	
-	private function saveData($filename, $extension, $size, $attributes) {
-		
-		$save_params = array(
-		
-			'dir' => $this->_dir,
-			'filename' => $filename,
-			'extension' => $extension,
-			'size' => $size,
-			'created_at' => Carbon::now(),
-			'attributes' => (!empty($attributes)) ? json_encode($attributes) : ''
-		
-		);
-		
-		$id = DB::table(self::TABLE)->insertGetId($save_params);
-		
-		if($id > 0) {
-			
-			$save_params['id'] = $id;
-			$save_params['attributes'] = $attributes;
-			$this->addLoadObject($save_params);
-			
-		} else {
-			
-			$id = -1;
-			throw new Exception('Save Failed.');
-			
-		}
-		
-		return $id;
-		
-	}
+
+    private function isOverwrite() {
+
+        return (Input::has(self::KEY_OVERWRITE_ID) && Input::get(self::KEY_OVERWRITE_ID) > 0);
+
+    }
+
+    private function saveData($filename, $extension, $size, $attributes) {
+
+        $save_params = array(
+
+            'dir' => $this->_dir,
+            'filename' => $filename,
+            'extension' => $extension,
+            'size' => $size,
+            'created_at' => Carbon::now(),
+            'attributes' => (!empty($attributes)) ? json_encode($attributes) : ''
+
+        );
+
+        if($this->isOverwrite()) {
+
+            $id = Input::get(self::KEY_OVERWRITE_ID);
+            DB::table(self::TABLE)->where('id', $id)->update($save_params);
+
+        } else {
+
+            $id = DB::table(self::TABLE)->insertGetId($save_params);
+
+        }
+
+        if($id > 0) {
+
+            $save_params['id'] = $id;
+            $save_params['attributes'] = $attributes;
+            $this->addLoadObject($save_params);
+
+        } else {
+
+            $id = -1;
+            throw new Exception('Save Failed.');
+
+        }
+
+        return $id;
+
+    }
 	
 }

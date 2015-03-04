@@ -69,6 +69,7 @@ Usage
 						'remove' => 'alert("Removed");', 
 						'load' => 'alert("Loading..");'
 					])
+					->overwrite(false)   // When using overwriting-mode
 					->button('Remove');
 	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.
 
