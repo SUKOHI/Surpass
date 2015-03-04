@@ -176,6 +176,7 @@
             TU{{ $dir_studly }}.formData['surpass_overwrite_id'] = targetId;
             TU{{ $dir_studly }}.overwritePreviewBox = $(self).parent();
             $('#'+ TU{{ $dir_studly }}.ids['input']).click();
+            return false;
 
         },
         isFull: function() {
