@@ -26,7 +26,22 @@
 
             $('#'+ TU{{ $dir_studly }}.ids['input']).fileupload({
                 dataType: 'json',
-                add: function (e, data) {
+                @if(!empty($resize_params['size']))
+                disableImageResize: false,
+                @endif
+                @if(!empty($resize_params['size']['maxWidth']))
+                imageMaxWidth: {{ intval($resize_params['size']['maxWidth']) }},
+                @endif
+                @if(!empty($resize_params['size']['maxHeight']))
+                imageMaxHeight: {{ intval($resize_params['size']['maxHeight']) }},
+                @endif
+                @if(!empty($resize_params['force_crop']))
+                imageCrop: {{ ($resize_params['force_crop']) ? 'true' : 'false' }},
+                @endif
+                @if($timeout > 0)
+                timeout: {{ $timeout }},
+                @endif
+                add: function(e, data) {
 
                     if(!TU{{ $dir_studly }}.isFull()) {
 
@@ -39,6 +54,7 @@
 
                         TU{{ $dir_studly }}.processingFile++;
                         {{ (!empty($callbacks['upload'])) ? $callbacks['upload'] : '' }}
+                        $.blueimp.fileupload.prototype.options.add.call(this, e, data);
                         data.submit();
 
                     } else if(TU{{ $dir_studly }}.overCallbackFlag && $.isFunction(TU{{ $dir_studly }}.overCallback)) {
@@ -47,6 +63,12 @@
                         TU{{ $dir_studly }}.overCallbackFlag = false;
 
                     }
+
+                },
+                error: function(e, data) {
+
+                    {{ (!empty($callbacks['timeout'])) ? $callbacks['timeout'] : '' }}
+                    this.done(e, {result: {result: false}, files: []});
 
                 },
                 change: function (e, data) {
@@ -62,7 +84,7 @@
 
                             if(!$(child).find('.{{ $id_hidden_name }}').length) {
 
-                                child.remove();
+                                $(child).remove();
                                 return false;
 
                             }
@@ -71,9 +93,9 @@
 
                     }
 
-                    var file = data.files[0];
+                    var file = (typeof(data.files[0]) == 'undefined') ? null : data.files[0];
 
-                    if(data['result']['result']) {
+                    if(file != null && data['result']['result']) {
 
                         loadImage(file, function (img) {
                                     TU{{ $dir_studly }}.preview(
@@ -176,7 +198,6 @@
             TU{{ $dir_studly }}.formData['surpass_overwrite_id'] = targetId;
             TU{{ $dir_studly }}.overwritePreviewBox = $(self).parent();
             $('#'+ TU{{ $dir_studly }}.ids['input']).click();
-            return false;
 
         },
         isFull: function() {

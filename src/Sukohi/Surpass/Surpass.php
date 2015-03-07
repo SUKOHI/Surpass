@@ -22,7 +22,8 @@ class Surpass {
 	private $_button = 'Remove';
 	private $_max_files = 5;
 	private $_filename_length = 10;
-	private $_form_data, $_result, $_load = array();
+    private $_timeout = 0;
+	private $_form_data, $_result, $_load, $_resize_params = array();
     private $_overwrite = false;
 	private $_ids = array(
 			
@@ -110,6 +111,20 @@ class Surpass {
 	
 	}
 
+    public function resize($size, $force_crop = true) {
+
+        $this->_resize_params = ['size' => $size, 'force_crop' => $force_crop];
+        return $this;
+
+    }
+
+    public function timeout($milliseconds) {
+
+        $this->_timeout = intval($milliseconds);
+        return $this;
+
+    }
+
 	public function overwrite($bool = false) {
 
 		$this->_overwrite = $bool;
@@ -183,7 +198,8 @@ class Surpass {
 				'alert' => sprintf($this->_alert, $this->_max_files), 
 				'button_label' => $this->_button,  
 				'preview_params' => $this->_preview_params,
-				'progress' => $this->_progress, 
+				'resize_params' => $this->_resize_params,
+				'progress' => $this->_progress,
 				'callbacks' => $this->_callbacks, 
 				'id_hidden_name' => $this->_id_hidden_name, 
 				'dir' => strtolower($this->_dir), 
@@ -193,7 +209,8 @@ class Surpass {
 				'css_div' => Surpass::renderCss('div'), 
 				'css_loading' => Surpass::renderCss('loading'), 
 				'css_button' => Surpass::renderCss('button'),
-                'overwrite' => $this->_overwrite
+                'overwrite' => $this->_overwrite,
+                'timeout' => $this->_timeout
 					
 			))->render();
 			

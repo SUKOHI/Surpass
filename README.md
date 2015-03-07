@@ -67,9 +67,12 @@ Usage
 						'done' => 'alert("Done.");',
 						'failed' => 'alert("Failed..");', 
 						'remove' => 'alert("Removed");', 
-						'load' => 'alert("Loading..");'
+						'load' => 'alert("Loading..");',
+                        'timeout' => 'alert("Timeout..");'
 					])
+					->timeout(3000) // 3 seconds
 					->overwrite(false)   // When using overwriting-mode
+					->resize(['maxWidth' => '100', 'maxHeight' => '50'], $force_crop = false)   // Client Resizing(See "About resizing")
 					->button('Remove');
 	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.
 
@@ -83,9 +86,10 @@ Usage
 
     (in View)    
     
-    Note: Need to load jQuery, jQuery UI and jQuery-File-Upload(jquery.iframe-transport.js, jquery.fileupload.js, load-image.all.min.js, tmpl.min.js)
-
+    Note: Need to load jQuery, jQuery UI and jQuery-File-Upload(Loading order is important.See the below.)
+    
     @section('content')
+    
         <form>
         	<input 
         		id="image_upload" 
@@ -101,8 +105,20 @@ Usage
         </form>
     @stop
     
-    <!-- JS code will be displayed here -->
     @section('script')
+    
+        <!-- Load required JS files. -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script src="bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+        <script src="bower_components/blueimp-load-image/js/load-image.all.min.js"></script>
+        <script src="bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
+        <script src="bower_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+        <script src="bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
+        <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+        <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
+        <script src="bower_components/blueimp-tmpl/js/tmpl.min.js"></script>
+    
+        <!-- JS code (including script tag) will be displayed here -->
         {{ $surpass->html('js') }}
     @stop
 
