@@ -16,6 +16,10 @@
         progress: '',
         overwriteFlag: {{ ($overwrite) ? 'true' : 'false' }},
         overwritePreviewBox: null,
+        @if(!empty($drop_zone_id))
+        dropZone: $('#{{ $drop_zone_id }}'),
+        @endif
+
         init: function() {
 
             if(TU{{ $dir_studly }}.loadData.length > 0) {
@@ -43,24 +47,34 @@
                 @endif
                 add: function(e, data) {
 
-                    if(!TU{{ $dir_studly }}.isFull()) {
+                    var fileType = data.files[0].type;
 
-                        if(TU{{ $dir_studly }}.progress != '') {
+                    if(fileType.indexOf('image/') === 0) {
 
-                            var loadingBox = tmpl('loading_box_{{ $dir }}', { content: TU{{ $dir_studly }}.progress });
-                            $('#'+ TU{{ $dir_studly }}.ids['preview']).append(loadingBox);
+                        if(!TU{{ $dir_studly }}.isFull()) {
+
+                            if(TU{{ $dir_studly }}.progress != '') {
+
+                                var loadingBox = tmpl('loading_box_{{ $dir }}', { content: TU{{ $dir_studly }}.progress });
+                                $('#'+ TU{{ $dir_studly }}.ids['preview']).append(loadingBox);
+
+                            }
+
+                            TU{{ $dir_studly }}.processingFile++;
+                            {{ (!empty($callbacks['upload'])) ? $callbacks['upload'] : '' }}
+                            $.blueimp.fileupload.prototype.options.add.call(this, e, data);
+                            data.submit();
+
+                        } else if(TU{{ $dir_studly }}.overCallbackFlag && $.isFunction(TU{{ $dir_studly }}.overCallback)) {
+
+                            TU{{ $dir_studly }}.overCallback();
+                            TU{{ $dir_studly }}.overCallbackFlag = false;
 
                         }
 
-                        TU{{ $dir_studly }}.processingFile++;
-                        {{ (!empty($callbacks['upload'])) ? $callbacks['upload'] : '' }}
-                        $.blueimp.fileupload.prototype.options.add.call(this, e, data);
-                        data.submit();
+                    } else {
 
-                    } else if(TU{{ $dir_studly }}.overCallbackFlag && $.isFunction(TU{{ $dir_studly }}.overCallback)) {
-
-                        TU{{ $dir_studly }}.overCallback();
-                        TU{{ $dir_studly }}.overCallbackFlag = false;
+                        {{ (!empty($callbacks['file_type_error'])) ? $callbacks['file_type_error'] : '' }}
 
                     }
 
@@ -72,6 +86,11 @@
 
                 },
                 change: function (e, data) {
+
+                    TU{{ $dir_studly }}.overCallbackFlag = true;
+
+                },
+                drop: function (e, data) {
 
                     TU{{ $dir_studly }}.overCallbackFlag = true;
 

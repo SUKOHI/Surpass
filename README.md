@@ -68,11 +68,13 @@ Usage
 						'failed' => 'alert("Failed..");', 
 						'remove' => 'alert("Removed");', 
 						'load' => 'alert("Loading..");',
-                        'timeout' => 'alert("Timeout..");'
+                        'timeout' => 'alert("Timeout..");',
+                        'file_type_error' => 'alert("Only image files are allowed");'
 					])
 					->timeout(3000) // 3 seconds
 					->overwrite(false)   // When using overwriting-mode
 					->resize(['maxWidth' => '100', 'maxHeight' => '50'], $force_crop = false)   // Client Resizing(See "About resizing")
+					->dropZone('drop_zone_id')  // See "Drop Zone"
 					->button('Remove');
 	$surpass->load([1, 2, 3]);    // These are IDs of DB that you saved image(s) in the past.
 
@@ -122,7 +124,7 @@ Usage
         {{ $surpass->html('js') }}
     @stop
 
-**Upload (in http://example.com/upload using Ajax)**
+**Upload (Ajax)**
 
     // To save an image and the data into DB
 
@@ -148,7 +150,7 @@ Usage
 	
 	*Note: To save a image you want, you need to make a specific dir in advance.
 
-**Remove (in http://example.com/remove using Ajax)**
+**Remove (Ajax)**
 
     // To remove an image and the data into DB
 
@@ -275,6 +277,19 @@ So when submitting, you can receive those data as array.
 
 *Note: This method is to save image(s) and their data directly like seeding.  
 So, in usual you should use save() method.
+
+**Drop Zone**
+
+If you'd like to upload images through Drop Zone(using Drag and Drop), add a div-tag like the below.
+    
+    (in Controller)
+    
+    $surpass->dropZone('drop_zone_id');
+    
+    
+    (in View)
+    
+    <div id="drop_zone_id">Drop images here!</div>
 
 License
 ====

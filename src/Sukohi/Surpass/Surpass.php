@@ -20,6 +20,7 @@ class Surpass {
 	private $_path, $_dir, $_progress;
 	private $_alert = 'You can upload up to %d files.';
 	private $_button = 'Remove';
+    private $_drop_zone_id = '';
 	private $_max_files = 5;
 	private $_filename_length = 10;
     private $_timeout = 0;
@@ -152,7 +153,14 @@ class Surpass {
 		return $this;
 		
 	}
-	
+
+    public function dropZone($id) {
+
+        $this->_drop_zone_id = $id;
+        return $this;
+
+    }
+
 	public function renderCss($mode) {
 		
 		return (!empty($this->_css[$mode])) ? ' class="'. $this->_css[$mode] .'"' : '';
@@ -200,7 +208,8 @@ class Surpass {
 				'preview_params' => $this->_preview_params,
 				'resize_params' => $this->_resize_params,
 				'progress' => $this->_progress,
-				'callbacks' => $this->_callbacks, 
+				'callbacks' => $this->_callbacks,
+                'drop_zone_id' => $this->_drop_zone_id,
 				'id_hidden_name' => $this->_id_hidden_name, 
 				'dir' => strtolower($this->_dir), 
 				'dir_studly' => studly_case($this->_dir),
