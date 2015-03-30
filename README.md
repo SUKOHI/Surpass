@@ -125,15 +125,18 @@ Usage
     @stop
 
 **Upload (Ajax)**
-
+	
+	*Important: To save images you want, you need to make a specific dir which must be writable in advance.
+	
     // To save an image and the data into DB
 
 	$surpass = Surpass::path('img/uploads')
 					->id('input', 'image_upload');
-	$dir = $surpass->requestDir();
 	$attributes = array('alt' => 'alt_value', 'title' => 'title_value');  // Skippable
 
 	if($surpass->save($attributes = array())) {
+	
+	    // You can get the data of saved image like this.
 	
 		$load_item = $surpass->loadSaved();
 		$id = $load_item->id;
@@ -147,8 +150,6 @@ Usage
 	}
 	
 	return $surpass->result();  // This will return json.
-	
-	*Note: To save a image you want, you need to make a specific dir in advance.
 
 **Remove (Ajax)**
 
