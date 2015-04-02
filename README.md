@@ -147,7 +147,7 @@ Usage
 		$attributes = $load_item->attributes;
 		$tag = $load_item->tag;
 		
-		// You can save attributes also here. (Of course you can do that other places.)
+		// You can save attributes also here. (Of course you can do that at other places.)
 		
 		$id = $load_item->id;
 		$surpass->saveAttributes($id, array(
