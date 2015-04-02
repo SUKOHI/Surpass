@@ -159,6 +159,20 @@ Usage
 	}
 	
 	return $surpass->result();  // This will return json.
+	
+*Note: If uploading completed, the result data(json) has the following values.
+
+1.result : true / false  
+2.insertId  
+3.path  
+4.dir  
+5.filename  
+6.file_path  
+7.extension  
+8.width  
+9.height  
+10.mime_type  
+11.saveMode : overwrite / insert
 
 **Remove (Ajax)**
 
