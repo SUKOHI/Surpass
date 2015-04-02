@@ -147,6 +147,15 @@ Usage
 		$attributes = $load_item->attributes;
 		$tag = $load_item->tag;
 		
+		// You can save attributes also here. (Of course you can do that other places.)
+		
+		$id = $load_item->id;
+		$surpass->saveAttributes($id, array(
+		    'key_1' => 'value_1',
+		    'key_2' => 'value_2',
+		    'key_3' => 'value_3'
+		));
+		
 	}
 	
 	return $surpass->result();  // This will return json.
@@ -276,8 +285,8 @@ So when submitting, you can receive those data as array.
                     ->dir('dir')
                     ->insert('file_path', $attributes = array());
 
-*Note: This method is to save image(s) and their data directly like seeding.  
-So, in usual you should use save() method.
+    *Note: This method is to save image(s) and their data directly like seeding.  
+    So, in usual you should use save() method.
 
 **Drop Zone**
 
@@ -291,6 +300,17 @@ If you'd like to upload images through Drop Zone(using Drag and Drop), add a div
     (in View)
     
     <div id="drop_zone_id">Drop images here!</div>
+
+**Save Attributes**
+
+    $id = 1;    // Here means ID of "image_files" table.
+    $surpass->saveAttributes($id, array(
+        'key_1' => 'value_1',
+        'key_2' => 'value_2',
+        'key_3' => 'value_3'
+    ));
+    
+    *Note: The old attributes data will be removed.
 
 License
 ====
