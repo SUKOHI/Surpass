@@ -39,6 +39,8 @@ And execute the followings.
 Usage
 ====
 
+(See also a folder named "exaple" which has some files.)
+
 **Upload  (in Controller)**
 
 	$surpass = Surpass::path('img/uploads')
