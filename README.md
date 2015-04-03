@@ -178,8 +178,7 @@ Usage
 
     // To remove an image and the data into DB
 
-	$surpass = Surpass::path('img/uploads')
-	                ->id('input', 'image_upload');
+	$surpass = Surpass::path('img/uploads');
 	
 	if($surpass->remove()) {
 		// Something..
