@@ -50,7 +50,7 @@ class Surpass {
 
     public function dir($dir) {
 
-        $this->_dir = $dir;
+        $this->_dir = str_replace(["\0", '/', '.'], '', $dir);
         $this->_id_hidden_name = self::ID_HIDDEN_NAME .'_'. $dir;
         return $this;
 

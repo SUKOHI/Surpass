@@ -85,6 +85,9 @@ Usage
 		'surpass' => $surpass
 			
 	]);
+	
+	
+*Note: method dir('dir_name') can no longer receive "/" and "." to protect from directory traversal attack.
 
 **Upload  (in View)**
 
