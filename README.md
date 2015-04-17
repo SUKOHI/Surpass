@@ -9,7 +9,8 @@ A PHP package mainly developed for Laravel to manage uploading images using Ajax
 Requirements
 ====
 
-jQuery, jQuery UI and 
+[jQuery](https://jquery.com/), 
+[jQuery UI](https://jqueryui.com/) and 
 [blueimp/jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload)
 
 
@@ -38,6 +39,12 @@ And execute the followings.
 
 Usage
 ====
+
+**Basic Usage**
+
+    $path = 'img/uploads';  // The folder to save images.
+    $dir = 'dir_name';  // The directory name to save images.
+    $surpass = Surpass::path($path)->dir($dir);
 
 (See also a folder named "exaple" which has some files.)
 
@@ -329,6 +336,198 @@ If you'd like to upload images through Drop Zone(using Drag and Drop), add a div
     ));
     
     *Note: The old attributes data will be removed.
+
+Methods
+====
+
+* Surpass::path($path)
+    
+    The path to save images.
+    
+    
+* Surpass::dir($dir)
+    
+    The directory to save images.
+    (The actual image file path is $path .'.'. $dir .'*******.***')
+    
+    
+* Surpass::ids($ids)
+
+    The IDs that you'd like to set for HTML input tags.
+    You can set the following ID names.
+    
+    * input
+    * preview
+
+    This method is skippable. (If you need multiple image uploads, use this method.)
+    (Default: input -> image_upload, preview -> preview_images)
+    
+    e.g.)
+    Surpass::ids([
+        'input' => 'image_upload',
+        'preview' => 'preview_images'
+    ]);
+    
+    
+* Surpass::maxFiles($max_file)
+
+    The maximum number of image files to upload.
+    This method is skippable.(Default: 5)
+    
+
+* Surpass::alert($message)
+
+    The message for when the count of the number of the images uploaded reach a maximum.
+
+    e.g)
+    Surpass::alert('You can upload up to %d files.');
+    This method is skippable.(Default: "You can upload up to %d files.")
+    
+  
+* Surpass::formData($values)
+
+    The additional data that will be included uploading request through Ajax.
+
+    e.g)
+        Surpass::formData([
+            'key_1' => 'value_1', 
+            'key_2' => 'value_2', 
+            'key_3' => 'value_3'
+        ]);
+    
+    This method is skippable.
+    
+
+* Surpass::preview($preview_options)
+
+    The options for preview like width, height and so on.
+    See [here](https://github.com/blueimp/JavaScript-Load-Image#options).
+    
+    e.g)
+    Surpass:preview(['maxHeight' => 120]);
+    
+    This method is skippable.
+    
+
+* Surpass::css($css_values)
+
+    The css values that will be set to specific elements.
+    You can set the following types.
+    
+    * preview   : for div element containing all elements.
+    * div       : for div element containing an individual image preview.
+    * loading   : for div element containing a loading message.
+    * button    : for button element to remove or overwrite.
+
+    e.g.)
+    css([
+        'div' => 'div_class', 
+        'button' => 'button_class', 
+        'preview' => 'preview_class', 
+        'loading' => 'loading_class'
+    ])
+
+    This method is skippable.
+    
+
+* Surpass::progress($loading_message)
+
+    The content displayed when uploading an image.
+    
+    e.g.)
+    Surpass::progress('<img src="loader.gif"><br>Uploading..')
+    
+    This method is skippable.(If you skip this method, loading message not displayed.)
+
+* Surpass::callback($callbacks)
+
+    The callback values for JavaScript.
+    You can set the following callbacks.
+    
+    upload          : called when uploading an image.
+    done            : called when uploading completed.
+    failed          : called when uploading failed.
+    remove          : called when an preview removed.
+    load            : called when loading an image.
+    timeout         : called when uploading is timeout.
+    file_type_error : called when selected file is not image.
+
+    e.g.)  
+        Surpass::callback([
+            'upload' => 'console.log(data);', 
+            'done' => 'console.log(data);',
+            'failed' => 'console.log(data);', 
+            'remove' => 'console.log(data);', 
+            'load' => 'console.log(data);', 
+            'timeout' => 'console.log(data);', 
+            'file_type_error' => 'console.log(data);'
+        ]);
+
+    Except "remove" can use "console.log(e);"
+    This method is skippable.
+
+
+* Surpass::timeout($seconds)
+
+    The seconds for timeout.
+    This method is skippable.
+    
+    e.g.)
+    Surpass::timeout(3000);
+    
+    
+* Surpass::overwrite($boolean)
+
+    A setting whether to use overwrite-mode.
+    In overwrite-mode you can't remove images.
+    This method is skippable.
+    
+    
+* Surpass::resize($options, $force_crop = false)
+
+    Settings for client resizing.
+    You can set the following types.
+    
+    * maxWidth
+    * maxHeight
+
+    See [here](https://github.com/blueimp/jQuery-File-Upload/wiki/Options#imageminwidth).
+    
+    If $force_crop is true, imageCrop added.
+    
+    See [here](https://github.com/blueimp/jQuery-File-Upload/wiki/Options#imagecrop).
+
+    This method is skippable.
+    
+    
+* Surpass::dropZone($drop_zone_id)
+
+    If you'd like to upload by drag-and-drop.
+    $drop_zone_id refers to ID of HTML element like the following.
+    
+    <div id="drop_zone">
+        Drop Zone
+    </div>
+    
+    This method is skippable.
+
+
+* Surpass:button($label)
+
+    The text that will be displayed on the Remove(Overwrite) button.
+    This method is skippable.(Default: Remove)
+
+* Surpass::load($ids)
+
+    (In the case that $ids is empty)
+
+    This method will automatically display previews using Input::old('***') when redirecting with input data.
+
+    (In the case that $ids is not empty)
+
+    If you'd like to display preview(s) by default, use this method.
+    $ids refers to IDs of image_files of DB.
+
 
 License
 ====
