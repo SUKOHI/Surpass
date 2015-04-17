@@ -435,7 +435,7 @@ Methods
     The content displayed when uploading an image.
     
     e.g.)
-    Surpass::progress('<img src="loader.gif"><br>Uploading..')
+    Surpass::progress('Uploading..')
     
     This method is skippable.(If you skip this method, loading message not displayed.)
 
