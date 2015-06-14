@@ -144,7 +144,8 @@ Usage
 
 	$surpass = Surpass::path('img/uploads')
 					->id('input', 'image_upload');
-	$attributes = array('alt' => 'alt_value', 'title' => 'title_value');  // Skippable
+	$attributes = array('alt' => 'alt_value', 'title' => 'title_value');  // Optional
+	$save_dir = $surpass->saveDir();    // The directory you want to save.(Optional)
 
 	if($surpass->save($attributes = array())) {
 	
@@ -359,7 +360,7 @@ Methods
     * input
     * preview
 
-    This method is skippable. (If you need multiple image uploads, use this method.)
+    This method is optional. (If you need multiple image uploads, use this method.)
     (Default: input -> image_upload, preview -> preview_images)
     
     e.g.)
@@ -372,7 +373,7 @@ Methods
 * Surpass::maxFiles($max_file)
 
     The maximum number of image files to upload.
-    This method is skippable.(Default: 5)
+    This method is optional.(Default: 5)
     
 
 * Surpass::alert($message)
@@ -381,7 +382,7 @@ Methods
 
     e.g)
     Surpass::alert('You can upload up to %d files.');
-    This method is skippable.(Default: "You can upload up to %d files.")
+    This method is optional.(Default: "You can upload up to %d files.")
     
   
 * Surpass::formData($values)
@@ -395,7 +396,7 @@ Methods
             'key_3' => 'value_3'
         ]);
     
-    This method is skippable.
+    This method is optional.
     
 
 * Surpass::preview($preview_options)
@@ -406,7 +407,7 @@ Methods
     e.g)
     Surpass:preview(['maxHeight' => 120]);
     
-    This method is skippable.
+    This method is optional.
     
 
 * Surpass::css($css_values)
@@ -427,7 +428,7 @@ Methods
         'loading' => 'loading_class'
     ])
 
-    This method is skippable.
+    This method is optional.
     
 
 * Surpass::progress($loading_message)
@@ -437,7 +438,7 @@ Methods
     e.g.)
     Surpass::progress('Uploading..')
     
-    This method is skippable.(If you skip this method, loading message not displayed.)
+    This method is optional.(If you skip this method, loading message not displayed.)
 
 * Surpass::callback($callbacks)
 
@@ -464,13 +465,13 @@ Methods
         ]);
 
     Except "remove" can use "console.log(e);"
-    This method is skippable.
+    This method is optional.
 
 
 * Surpass::timeout($seconds)
 
     The seconds for timeout.
-    This method is skippable.
+    This method is optional.
     
     e.g.)
     Surpass::timeout(3000);
@@ -480,7 +481,7 @@ Methods
 
     A setting whether to use overwrite-mode.
     In overwrite-mode you can't remove images.
-    This method is skippable.
+    This method is optional.
     
     
 * Surpass::resize($options, $force_crop = false)
@@ -497,7 +498,7 @@ Methods
     
     See [here](https://github.com/blueimp/jQuery-File-Upload/wiki/Options#imagecrop).
 
-    This method is skippable.
+    This method is optional.
     
     
 * Surpass::dropZone($drop_zone_id)
@@ -509,13 +510,13 @@ Methods
         Drop Zone
     </div>
     
-    This method is skippable.
+    This method is optional.
 
 
 * Surpass:button($label)
 
     The text that will be displayed on the Remove(Overwrite) button.
-    This method is skippable.(Default: Remove)
+    This method is optional.(Default: Remove)
 
 * Surpass::load($ids)
 
