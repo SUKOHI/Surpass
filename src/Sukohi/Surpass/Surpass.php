@@ -347,6 +347,12 @@ class Surpass {
 
     }
 
+    public function saveDir() {
+
+        return $this->dir(Input::get(self::DIR_HIDDEN_NAME));
+
+    }
+
     public function remove() {
 
         $result = $this->removeById(intval(Input::get('remove_id')));
