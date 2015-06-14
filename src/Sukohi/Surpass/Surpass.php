@@ -349,7 +349,7 @@ class Surpass {
 
     public function saveDir() {
 
-        return $this->dir(Input::get(self::DIR_HIDDEN_NAME));
+        return Input::get(self::DIR_HIDDEN_NAME);
 
     }
 
