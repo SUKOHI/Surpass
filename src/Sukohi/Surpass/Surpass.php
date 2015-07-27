@@ -168,32 +168,35 @@ class Surpass {
 
     public function html($mode) {
 
+        $load_data = [];
+
+        if(!empty($this->_load)) {
+
+            foreach ($this->_load as $id => $load) {
+
+                $load_data[] = array(
+
+                    'id' => $id,
+                    'url' => $load->url,
+                    'filename' => $load->filename
+
+                );
+
+            }
+
+        }
+
         if($mode == 'preview') {
 
             return View::make('packages.sukohi.surpass.preview', array(
                 'id' => $this->renderId('preview'),
-                'css' => $this->renderCss('preview')
+                'css' => $this->renderCss('preview'),
+                'load_data' => $load_data,
+                'id_hidden_name' => $this->_id_hidden_name
             ))->render();
 
         } else if($mode == 'js') {
 
-            $load_data = [];
-
-            if(!empty($this->_load)) {
-
-                foreach ($this->_load as $id => $load) {
-
-                    $load_data[] = array(
-
-                        'id' => $id,
-                        'url' => $load->url,
-                        'filename' => $load->filename
-
-                    );
-
-                }
-
-            }
             $this->_form_data[self::DIR_HIDDEN_NAME] = $this->_dir;
             $this->_form_data[self::KEY_HIDDEN_NAME] = json_encode($this->_ids);
 

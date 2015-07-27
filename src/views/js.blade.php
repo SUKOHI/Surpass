@@ -147,6 +147,14 @@
 
             var previewBox = tmpl('preview_box_{{ $dir }}', {});
             var previewFooter = tmpl('preview_footer_{{ $dir }}', {surpassId: id, filename: filename});
+            var hiddenObj = $('.{{ $id_hidden_name }}[value='+ id +']');
+
+            if(hiddenObj.length) {
+
+                hiddenObj.remove();
+
+            }
+
             var content = $(previewBox).append(img).append(previewFooter);
 
             if(saveMode == 'overwrite') {
