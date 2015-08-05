@@ -1,7 +1,8 @@
 Surpass
 =====
 
-A PHP package mainly developed for Laravel to manage uploading images using Ajax and displaying thumbnails.
+A PHP package mainly developed for Laravel to manage uploading images using Ajax and displaying thumbnails.  
+(This is for Laravel 4.2. [For Laravel 5+](https://github.com/SUKOHI/Surpass))
 
 (Example)  
 !['Kitsilano'](http://i.imgur.com/cJ6t50G.png)
@@ -14,20 +15,31 @@ Requirements
 [blueimp/jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload)
 
 
-Installation&setting for Laravel
+Installation
 ====
 
-After installation using composer, add the followings to the array in  app/config/app.php
+Add this package name in composer.json
+
+    "require": {
+      "sukohi/surpass": "1.*"
+    }
+
+Execute composer command.
+
+    composer update
+
+Register the service provider in app.php
 
     'providers' => array(  
         ...Others...,  
-        'Sukohi\Surpass\SurpassServiceProvider', 
+        'Sukohi\Surpass\SurpassServiceProvider',
     )
 
+Also alias
 
     'aliases' => array(  
         ...Others...,  
-        'Surpass' =>'Sukohi\Surpass\Facades\Surpass',
+        'Surpass' => 'Sukohi\Surpass\Facades\Surpass',
     )
 
 And execute the followings.  
