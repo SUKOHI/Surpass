@@ -1,8 +1,9 @@
 <html>
 <head>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <!-- Bootstrap -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <style>
 
         .preview {
@@ -25,11 +26,11 @@
         data-remove-url="{{ route('home.surpass_remove_test') }}"
         accept="image/*"
         type="file" multiple>
-        {{ $surpass->html('preview') }}
+        {!! $surpass->html('preview') !!}
 
 </div>
 
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
 <script src="bower_components/blueimp-load-image/js/load-image.all.min.js"></script>
 <script src="bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
@@ -38,7 +39,7 @@
 <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
 <script src="bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
 <script src="bower_components/blueimp-tmpl/js/tmpl.min.js"></script>
-{{ $surpass->html('js') }}
+{!! $surpass->html('js') !!}
 
 </body>
 </html>

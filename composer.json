@@ -1,22 +1,18 @@
 {
     "name": "sukohi/surpass",
     "description": "A PHP package mainly developed for Laravel to manage uploading images using Ajax and displaying thumbnail.",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sukohi",
             "email": "capilano.sukohi@gmail.com"
         }
     ],
-	"license": "MIT",
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "4.2.*"
+        "laravel/framework": "~5.0"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
-        "psr-0": {
+        "psr-4": {
             "Sukohi\\Surpass\\": "src/"
         }
     },

@@ -10,7 +10,7 @@ class SurpassTestController extends BaseController {
 
     public function surpass_test() {
 
-        $surpass = Surpass::path($this->_surpass_test_path)
+        $surpass = \Surpass::path($this->_surpass_test_path)
             ->dir($this->_surpass_test_dir)
             ->progress('Uploading..')
             ->css([
@@ -26,7 +26,7 @@ class SurpassTestController extends BaseController {
 
     public function surpass_upload_test() {
 
-        $surpass = Surpass::path($this->_surpass_test_path);
+        $surpass = \Surpass::path($this->_surpass_test_path);
 
         if($surpass->save()) {
 
@@ -40,7 +40,7 @@ class SurpassTestController extends BaseController {
 
     public function surpass_remove_test() {
 
-        $surpass = Surpass::path($this->_surpass_test_path);
+        $surpass = \Surpass::path($this->_surpass_test_path);
 
         // You may need to check authorization here.
 

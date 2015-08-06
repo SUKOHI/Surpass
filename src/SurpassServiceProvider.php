@@ -9,7 +9,7 @@ class SurpassServiceProvider extends ServiceProvider {
 	 *
 	 * @var bool
 	 */
-	protected $defer = false;
+	protected $defer = true;
 
 	/**
 	 * Bootstrap the application events.
@@ -18,7 +18,11 @@ class SurpassServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('sukohi/surpass');
+		$this->loadViewsFrom(__DIR__.'/views', 'surpass');
+
+		$this->publishes([
+			__DIR__.'/migrations' => database_path('migrations')
+		], 'migrations');
 	}
 
 	/**
@@ -41,7 +45,7 @@ class SurpassServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('surpass');
+		return ['surpass'];
 	}
 
 }

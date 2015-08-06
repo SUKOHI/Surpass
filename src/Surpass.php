@@ -1,11 +1,8 @@
 <?php namespace Sukohi\Surpass;
 
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
+use DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use Exception;
 
@@ -14,6 +11,7 @@ class Surpass {
     const TABLE = 'image_files';
     const DIR_HIDDEN_NAME = 'surpass_hidden_dir';
     const ID_HIDDEN_NAME = 'surpass_ids';
+    const TOKEN_HIDDEN_NAME = '_token';
     const KEY_HIDDEN_NAME = 'surpass_keys';
     const KEY_OVERWRITE_ID = 'surpass_overwrite_id';
     private $_path, $_dir, $_progress;
@@ -23,23 +21,11 @@ class Surpass {
     private $_max_files = 5;
     private $_filename_length = 10;
     private $_timeout = 0;
-    private $_form_data, $_result, $_load, $_resize_params, $_css = array();
+    private $_form_data, $_result, $_load, $_resize_params, $_css = [];
     private $_overwrite = false;
-    private $_ids = array(
-
-        'input' => 'image_upload',
-        'preview' => 'preview_images'
-
-    );
-    private $_callbacks = array(
-        'add' => '',
-        'done' => ''
-    );
-    private $_preview_params = array(
-
-        'maxHeight' => 120
-
-    );
+    private $_ids = ['input' => 'image_upload', 'preview' => 'preview_images'];
+    private $_callbacks = ['add' => '', 'done' => ''];
+    private $_preview_params = ['maxHeight' => 120];
 
     public function path($path) {
 
@@ -174,13 +160,13 @@ class Surpass {
 
             foreach ($this->_load as $id => $load) {
 
-                $load_data[] = array(
+                $load_data[] = [
 
                     'id' => $id,
                     'url' => $load->url,
                     'filename' => $load->filename
 
-                );
+                ];
 
             }
 
@@ -188,19 +174,20 @@ class Surpass {
 
         if($mode == 'preview') {
 
-            return View::make('packages.sukohi.surpass.preview', array(
+            return view('surpass::preview', [
                 'id' => $this->renderId('preview'),
                 'css' => $this->renderCss('preview'),
                 'load_data' => $load_data,
                 'id_hidden_name' => $this->_id_hidden_name
-            ))->render();
+            ])->render();
 
         } else if($mode == 'js') {
 
             $this->_form_data[self::DIR_HIDDEN_NAME] = $this->_dir;
             $this->_form_data[self::KEY_HIDDEN_NAME] = json_encode($this->_ids);
+            $this->_form_data[self::TOKEN_HIDDEN_NAME] = csrf_token();
 
-            return View::make('packages.sukohi.surpass.js', array(
+            return view('surpass::js', [
 
                 'max_file' => $this->_max_files,
                 'load_data' => $load_data,
@@ -223,7 +210,7 @@ class Surpass {
                 'overwrite' => $this->_overwrite,
                 'timeout' => $this->_timeout
 
-            ))->render();
+            ])->render();
 
         }
 
@@ -236,7 +223,7 @@ class Surpass {
 
     }
 
-    public function insert($file_path, $attributes = array()) {
+    public function insert($file_path, $attributes = []) {
 
         if(!File::exists($file_path)) {
 
@@ -274,7 +261,7 @@ class Surpass {
 
     }
 
-    public function save($attributes = array()) {
+    public function save($attributes = []) {
 
         $this->dir(Input::get(self::DIR_HIDDEN_NAME));
         $this->ids(json_decode(Input::get(self::KEY_HIDDEN_NAME), true));
@@ -318,7 +305,7 @@ class Surpass {
 
         }
 
-        $this->_result = array(
+        $this->_result = [
             'result' => $result,
             'insertId' => $id,
             'path' => $this->_path,
@@ -330,7 +317,7 @@ class Surpass {
             'height' => $height,
             'mime_type' => $mime_type,
             'saveMode' => ($this->isOverwrite()) ? 'overwrite' : 'insert'
-        );
+        ];
 
         if(!empty($error_message)) {
 
@@ -344,9 +331,9 @@ class Surpass {
 
     public function saveAttributes($id, $attributes) {
 
-        return DB::table(self::TABLE)->where('id', $id)->update(array(
+        return DB::table(self::TABLE)->where('id', $id)->update([
             'attributes' => json_encode($attributes)
-        ));
+        ]);
 
     }
 
@@ -359,7 +346,7 @@ class Surpass {
     public function remove() {
 
         $result = $this->removeById(intval(Input::get('remove_id')));
-        $this->_result = array('result' => $result);
+        $this->_result = ['result' => $result];
         return $result;
 
     }
@@ -376,7 +363,7 @@ class Surpass {
 
         if(!is_array($ids)) {
 
-            $ids = array($ids);
+            $ids = [$ids];
 
         }
 
@@ -386,7 +373,7 @@ class Surpass {
 
             foreach ($ids as $id) {
 
-                $db = DB::table(self::TABLE)->where('id', '=', $id);
+                $db = DB::table(self::TABLE)->where('id', $id);
                 $image_file = $db->select('dir', 'filename')->first();
                 $remove_path = $this->filePath($image_file->dir, $image_file->filename);
                 File::delete($remove_path);
@@ -410,8 +397,8 @@ class Surpass {
     public function result() {
 
         $result = $this->_result;
-        $this->_result = array();
-        return Response::json($result);
+        $this->_result = [];
+        return response()->json($result);
 
     }
 
@@ -422,7 +409,7 @@ class Surpass {
         try {
 
             $image_files = DB::table(self::TABLE)->select('id', 'dir', 'filename')->get();
-            $exists_image_paths = array();
+            $exists_image_paths = [];
 
             foreach ($image_files as $key => $image_file) {
 
@@ -431,7 +418,7 @@ class Surpass {
                 if(!file_exists($path)) {
 
                     DB::table(self::TABLE)
-                        ->where('id', '=', $image_file->id)
+                        ->where('id', $image_file->id)
                         ->delete();
 
                 } else {
@@ -468,7 +455,7 @@ class Surpass {
 
     }
 
-    public function load($ids=array(), $old_flag=true) {
+    public function load($ids=[], $old_flag=true) {
 
         if(!is_array($ids)) {
 
@@ -477,16 +464,16 @@ class Surpass {
         }
 
         if($old_flag
-            && Input::old($this->_id_hidden_name)
-            && is_array(Input::old($this->_id_hidden_name))) {
+            && old($this->_id_hidden_name)
+            && is_array(old($this->_id_hidden_name))) {
 
-            $ids = Input::old($this->_id_hidden_name);
+            $ids = old($this->_id_hidden_name);
 
         }
 
         if(!empty($ids)) {
 
-            $this->_load = array();
+            $this->_load = [];
             $image_files = DB::table(self::TABLE)
                 ->select('id', 'dir', 'filename', 'extension', 'size', 'created_at', 'attributes')
                 ->whereIn('id', $ids)
@@ -494,7 +481,7 @@ class Surpass {
 
             foreach ($image_files as $image_file) {
 
-                $this->addLoadObject(array(
+                $this->addLoadObject([
 
                     'id' => $image_file->id,
                     'dir' => $image_file->dir,
@@ -504,7 +491,7 @@ class Surpass {
                     'created_at' => $image_file->created_at,
                     'attributes' => json_decode($image_file->attributes, true)
 
-                ));
+                ]);
 
             }
 
@@ -567,7 +554,7 @@ class Surpass {
 
     private function fileUrl($dir, $filename) {
 
-        return URL::to($this->_path .'/'. $dir .'/'. $filename);
+        return url($this->_path .'/'. $dir .'/'. $filename);
 
     }
 
@@ -622,7 +609,7 @@ class Surpass {
 
     private function saveData($filename, $extension, $size, $attributes) {
 
-        $save_params = array(
+        $save_params = [
 
             'dir' => $this->_dir,
             'filename' => $filename,
@@ -631,7 +618,7 @@ class Surpass {
             'created_at' => Carbon::now(),
             'attributes' => (!empty($attributes)) ? json_encode($attributes) : ''
 
-        );
+        ];
 
         if($this->isOverwrite()) {
 
