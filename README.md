@@ -109,11 +109,11 @@ Usage
 
 **Upload  (in View)**
 
-Note - 1:  
+Note1:  
 Need to load jQuery, jQuery UI and jQuery-File-Upload. (Loading order is important. See the below)  
 If you can use bower, use `bower install blueimp-file-upload --save-dev` to install all of the packages easily.  
 
-Note - 2:  
+Note2:  
 Changed tags `{{` and `}}` to `{!!` and `!!}` from the previous version.  
 
     @section('content')
