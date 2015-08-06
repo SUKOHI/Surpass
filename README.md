@@ -39,7 +39,7 @@ Also alias
 
     'aliases' => [
         ...Others...,  
-        'Surpass'   => Sukohi\Surpass\Facades\\Surpass::class
+        'Surpass'   => Sukohi\Surpass\Facades\Surpass::class
     ]
 
 And execute the next commands.  
@@ -426,7 +426,7 @@ Methods
     See [here](https://github.com/blueimp/JavaScript-Load-Image#options).
     
     e.g)
-    Surpass:preview(['maxHeight' => 120]);
+    \Surpass::preview(['maxHeight' => 120]);
     
     This method is optional.
   
@@ -535,7 +535,7 @@ Methods
     This method is optional.
   
   
-* Surpass:button($label)
+* button($label)
 
     The text that will be displayed on the Remove(Overwrite) button.
     This method is optional.(Default: Remove)
