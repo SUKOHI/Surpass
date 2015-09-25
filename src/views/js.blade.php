@@ -117,15 +117,20 @@
                     if(file != null && data['result']['result']) {
 
                         loadImage(file, function (img) {
-                                    TU{!! $dir_studly !!}.preview(
-                                            img,
-                                            data['result']['insertId'],
-                                            file.name,
-                                            data['result']['saveMode']
-                                    );
-                                    {!! (!empty($callbacks['done'])) ? $callbacks['done'] : '' !!}
-                                }, TU{!! $dir_studly !!}.previewParameters
-                        );
+
+                            if(img.type != 'error') {
+
+                                TU{!! $dir_studly !!}.preview(
+                                        img,
+                                        data['result']['insertId'],
+                                        file.name,
+                                        data['result']['saveMode']
+                                );
+                                {!! (!empty($callbacks['done'])) ? $callbacks['done'] : '' !!}
+
+                            }
+
+                        }, TU{!! $dir_studly !!}.previewParameters);
 
                     } else {
 
