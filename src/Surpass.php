@@ -290,6 +290,16 @@ class Surpass {
 
             }
 
+            if($this->isOverwrite()){
+
+                $oldid = Input::get(self::KEY_OVERWRITE_ID);
+                $olddb = DB::table(self::TABLE)->where('id', $oldid);
+                $image_file = $olddb->select('dir', 'filename')->first();
+                $remove_path = $this->filePath($image_file->dir, $image_file->filename);
+                File::delete($remove_path);
+
+            }
+
             Input::file($input_id)->move($save_path, $filename);
             $id = $this->saveData($filename, $extension, $file_size, $attributes);
             DB::commit();

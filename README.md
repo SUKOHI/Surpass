@@ -43,9 +43,14 @@ Also alias
     ]
 
 And execute the next commands.  
-**Note: If you get errors after updating, also execute them.**
 
     php artisan vendor:publish  
+    php artisan migrate
+    
+**Note: If you get errors after updating, execute the next.**
+
+    php artisan vendor:publish --force
+    php artisan migrate:rollback
     php artisan migrate
 
 Usage
@@ -552,7 +557,11 @@ Methods
     If you'd like to display specific preview(s) by default, use this method.
     $ids refers to IDs of image_files from DB.
   
-  
+Special thanks
+====
+
+* [dsfser](https://github.com/dsfser)
+
 License
 ====
 
