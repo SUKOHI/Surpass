@@ -18,7 +18,7 @@ class SurpassServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('sukohi/surpass');
+		$this->package('whoops-report/surpass');
 	}
 
 	/**

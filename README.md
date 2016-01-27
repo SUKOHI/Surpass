@@ -541,6 +541,10 @@ Methods
     If you'd like to display preview(s) by default, use this method.
     $ids refers to IDs of image_files of DB.
 
+Special thanks
+====
+
+* [dsfser](https://github.com/dsfser)
 
 License
 ====
