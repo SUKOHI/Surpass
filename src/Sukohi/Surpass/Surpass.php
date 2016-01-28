@@ -229,8 +229,7 @@ class Surpass {
                 'css_loading' => Surpass::renderCss('loading'),
                 'css_button' => Surpass::renderCss('button'),
                 'overwrite' => $this->_overwrite,
-                'timeout' => $this->_timeout,
-                'rename_files' => $this->_rename_files,
+                'timeout' => $this->_timeout
 
             ))->render();
 
