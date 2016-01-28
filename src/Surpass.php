@@ -26,6 +26,7 @@ class Surpass {
     private $_ids = ['input' => 'image_upload', 'preview' => 'preview_images'];
     private $_callbacks = ['add' => '', 'done' => ''];
     private $_preview_params = ['maxHeight' => 120];
+    private $_rename_files = true;
 
     public function path($path) {
 
@@ -142,6 +143,13 @@ class Surpass {
     public function dropZone($id) {
 
         $this->_drop_zone_id = $id;
+        return $this;
+
+    }
+
+    public function renameFiles($bool = true) {
+
+        $this->_rename_files = $bool;
         return $this;
 
     }
@@ -267,18 +275,17 @@ class Surpass {
         $this->ids(json_decode(Input::get(self::KEY_HIDDEN_NAME), true));
         $result = false;
         $id = $width = $height = -1;
-        $mime_type = '';
+        $mime_type = $error_message = '';
         $input_id = $this->_ids['input'];
-        $extension = Input::file($input_id)->getClientOriginalExtension();
-        $filename = $this->filename($extension);
-        $file_size = Input::file($input_id)->getSize();
-        $error_message = '';
+        $save_path = $this->filePath($this->_dir);
+        $file = Input::file($input_id);
+        $filename = $this->filename($file, $save_path);
+        $extension = $file->getClientOriginalExtension();
+        $file_size = $file->getSize();
 
         DB::beginTransaction();
 
         try {
-
-            $save_path = $this->filePath($this->_dir);
 
             if(!file_exists($save_path)) {
 
@@ -605,9 +612,33 @@ class Surpass {
 
     }
 
-    private function filename($extension) {
+    private function filename($file, $save_path) {
 
-        return str_random($this->_filename_length) .'.'. $extension;
+        $extension = $file->getClientOriginalExtension();
+        $filename = $file->getClientOriginalName();
+
+        if($this->_rename_files) {
+            return str_random($this->_filename_length) .'.'. $extension;
+        }
+        else {
+            // check if filename exist
+            if(!File::exists($save_path . "/" . $filename)) {
+                return $filename;
+            }
+            // else add a incremental number until file don't exist
+            else {
+                $i = 1;
+                $new_filename = str_replace(".".$extension, "", $filename) . "-" . $i . "." . $extension;
+                $file_path = $save_path . "/" . $new_filename;
+
+                while(File::exists($file_path)) {
+                    $i++;
+                    $new_filename = str_replace(".".$extension, "", $filename) . "-" . $i . "." . $extension;
+                    $file_path = $save_path . "/" . $new_filename;
+                }
+                return $new_filename;
+            }
+        }
 
     }
 
