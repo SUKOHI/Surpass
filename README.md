@@ -158,6 +158,7 @@ Usage
 					->id('input', 'image_upload');
 	$attributes = array('alt' => 'alt_value', 'title' => 'title_value');  // Optional
 	$save_dir = $surpass->saveDir();    // The directory you want to save.(Optional)
+	$surpass->renameFiles(true);    // If you'd like to use the original filename, set false.(Optional)
 
 	if($surpass->save($attributes = array())) {
 	
@@ -185,7 +186,8 @@ Usage
 	
 	return $surpass->result();  // This will return json.
 	
-*Note: If uploading completed, the result data(json) has the following values.
+*Note 1: If uploading completed, the result data(json) has the following values.  
+*Note 2: About renameFiles(), [See the details](#rename_files)
 
 1.result : true / false  
 2.insertId  
@@ -541,10 +543,32 @@ Methods
     If you'd like to display preview(s) by default, use this method.
     $ids refers to IDs of image_files of DB.
 
+<a name="rename_files"></a>
+
+* Surpass::renameFiles($bool = true)  
+By this method, you can choose whether file name will be decided randomly or not when saving.(Optional)  
+    
+    * If $bool is `true`, file name will be decided randomly.
+    * If $bool is `false`, file name will be the same with the original file name.  
+    
+    However, if the same file already exists, incremental number will be added like `filename-1.jpg`.  
+
+
+    
+    $surpass = Surpass::path('YOUR_PATH');
+    $surpass->renameFiles(false);
+    
+    if($surpass->save()) {
+    
+        // Something..
+    
+    }
+
 Special thanks
 ====
 
 * [dsfser](https://github.com/dsfser)
+* [Marco Mazzocchi](https://github.com/marco-mazzocchi)
 
 License
 ====
