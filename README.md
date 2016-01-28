@@ -554,15 +554,14 @@ By this method, you can choose whether file name will be decided randomly or not
     However, if the same file already exists, incremental number will be added like `filename-1.jpg`.  
 
 
-    
-    $surpass = Surpass::path('YOUR_PATH');
-    $surpass->renameFiles(false);
-    
-    if($surpass->save()) {
-    
-        // Something..
-    
-    }
+        $surpass = Surpass::path('YOUR_PATH');
+        $surpass->renameFiles(false);
+        
+        if($surpass->save()) {
+        
+            // Something..
+        
+        }
 
 Special thanks
 ====
