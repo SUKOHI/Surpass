@@ -8,7 +8,6 @@ use Exception;
 
 class Surpass {
 
-    const TABLE = 'image_files';
     const DIR_HIDDEN_NAME = 'surpass_hidden_dir';
     const ID_HIDDEN_NAME = 'surpass_ids';
     const TOKEN_HIDDEN_NAME = '_token';
@@ -299,8 +298,9 @@ class Surpass {
 
             if($this->isOverwrite()){
 
+				$table = $this->getTable();
                 $oldid = Input::get(self::KEY_OVERWRITE_ID);
-                $olddb = DB::table(self::TABLE)->where('id', $oldid);
+                $olddb = DB::table($table)->where('id', $oldid);
                 $image_file = $olddb->select('dir', 'filename')->first();
                 $remove_path = $this->filePath($image_file->dir, $image_file->filename);
                 File::delete($remove_path);
@@ -348,7 +348,8 @@ class Surpass {
 
     public function saveAttributes($id, $attributes) {
 
-        return DB::table(self::TABLE)->where('id', $id)->update([
+		$table = $this->getTable();
+        return DB::table($table)->where('id', $id)->update([
             'attributes' => json_encode($attributes)
         ]);
 
@@ -390,7 +391,8 @@ class Surpass {
 
             foreach ($ids as $id) {
 
-                $db = DB::table(self::TABLE)->where('id', $id);
+				$table = $this->getTable();
+                $db = DB::table($table)->where('id', $id);
                 $image_file = $db->select('dir', 'filename')->first();
                 $remove_path = $this->filePath($image_file->dir, $image_file->filename);
                 File::delete($remove_path);
@@ -425,7 +427,8 @@ class Surpass {
 
         try {
 
-            $image_files = DB::table(self::TABLE)->select('id', 'dir', 'filename')->get();
+			$table = $this->getTable();
+            $image_files = DB::table($table)->select('id', 'dir', 'filename')->get();
             $exists_image_paths = [];
 
             foreach ($image_files as $key => $image_file) {
@@ -434,7 +437,7 @@ class Surpass {
 
                 if(!file_exists($path)) {
 
-                    DB::table(self::TABLE)
+                    DB::table($table)
                         ->where('id', $image_file->id)
                         ->delete();
 
@@ -491,7 +494,8 @@ class Surpass {
         if(!empty($ids)) {
 
             $this->_load = [];
-            $image_files = DB::table(self::TABLE)
+			$table = $this->getTable();
+            $image_files = DB::table($table)
                 ->select('id', 'dir', 'filename', 'extension', 'size', 'created_at', 'attributes')
                 ->whereIn('id', $ids)
                 ->get();
@@ -554,6 +558,19 @@ class Surpass {
         return $ids;
 
     }
+
+	public function getTable() {
+
+		$default_table = $this->getDefaultTable();
+		return config('surpass.table', $default_table);
+
+	}
+
+	public function getDefaultTable() {
+
+		return 'image_files';
+
+	}
 
     private function filePath($dir, $filename='') {
 
@@ -660,15 +677,16 @@ class Surpass {
             'attributes' => (!empty($attributes)) ? json_encode($attributes) : ''
 
         ];
+		$table = $this->getTable();
 
         if($this->isOverwrite()) {
 
             $id = Input::get(self::KEY_OVERWRITE_ID);
-            DB::table(self::TABLE)->where('id', $id)->update($save_params);
+            DB::table($table)->where('id', $id)->update($save_params);
 
         } else {
 
-            $id = DB::table(self::TABLE)->insertGetId($save_params);
+            $id = DB::table($table)->insertGetId($save_params);
 
         }
 

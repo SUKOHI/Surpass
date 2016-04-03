@@ -578,12 +578,28 @@ By this method, you can choose whether file name will be decided randomly or not
             // Something..
         
         }
-        
+
+Configuration
+====
+
+After executing `vendor:publish`, you have a configuration file called `surpass.php` in /config.  
+In there, you can change table name that Surpass will use.  
+
+**Note**: For stable DB design, the actual table name in your database will NOT be changed automatically.  
+So, in order to rename, you need to generate a migration file and to execute it after setting the new table name in the configuration file.  
+For more details, see [Renaming / Dropping Tables](https://laravel.com/docs/master/migrations#renaming-and-dropping-tables)
+or
+`examples/migrations/2016_04_03_063049_rename_image_files_to_thumbnail_files.php`.
+
+
 Special thanks
 ====
 
+Thank you guys for your contributions!
+
 * [dsfser](https://github.com/dsfser)
 * [Marco Mazzocchi](https://github.com/marco-mazzocchi)
+* [nmfzone](https://github.com/nmfzone)
 
 License
 ====

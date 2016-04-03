@@ -19,10 +19,12 @@ class SurpassServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->loadViewsFrom(__DIR__.'/views', 'surpass');
-
 		$this->publishes([
 			__DIR__.'/migrations' => database_path('migrations')
 		], 'migrations');
+		$this->publishes([
+			__DIR__.'/config/surpass.php' => config_path('surpass.php'),
+		], 'config');
 	}
 
 	/**
