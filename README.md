@@ -4,6 +4,8 @@ Surpass
 A PHP package mainly developed for Laravel to manage uploading images using Ajax and displaying thumbnails.  
 (This is for Laravel 5+. [For Laravel 4.2](https://github.com/SUKOHI/Surpass/tree/1.0))
 
+**[Demo](http://demo-laravel52.capilano-fw.com/surpass)**
+
 (Example)  
 !['Kitsilano'](http://i.imgur.com/cJ6t50G.png)
 
