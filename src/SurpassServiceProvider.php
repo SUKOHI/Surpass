@@ -34,10 +34,11 @@ class SurpassServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['surpass'] = $this->app->share(function($app)
-		{
-			return new Surpass;
-		});
+        $this->app->singleton('surpass', function(){
+
+            return new Surpass;
+
+        });
 	}
 
 	/**
